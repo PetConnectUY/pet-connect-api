@@ -38,13 +38,7 @@ Podrás acceder a la API desde la siguiente dirección  ```http://localhost:8601
 
 | Method | Endopint | Request | Controller@function |
 | ------------- | ------------- | ------------- | ------------- |
-| POST | /api/users | - firstname | UserController@store |
-|      |            | - lastname  |                      |
-|      |            | - username  |                      |
-|      |            | - email     |                      |
-|      |            | - password  |                      |
-|      |            | - phone     |                      |
-|      |            | - address   |                      |
+| POST | /api/users | <li>firstname</li><li>lastname</li><li>username</li><li>email</li><li>password</li><li>phone</li><li>address</li> | UserController@store |
 | POST | /api/users/{id} | - firstname | UserController@update |
 |      |                 | - lastname  |                       |
 |      |                 | - phone     |                       |
