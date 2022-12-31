@@ -39,8 +39,8 @@ Podrás acceder a la API desde la siguiente dirección  ```http://localhost:8601
 | Method | Endopint | Request | Controller@function |
 | ------------- | ------------- | ------------- | ------------- |
 | POST | /api/users | <li>firstname</li><li>lastname</li><li>username</li><li>email</li><li>password</li><li>phone</li><li>address</li> | UserController@store |
-| POST | /api/users/{id} | - firstname | UserController@update |
-|      |                 | - lastname  |                       |
-|      |                 | - phone     |                       |
-|      |                 | - address   |                       |
-| DELETE | /api/users/{id} | | UserController@destroy | 
+| POST | /api/users/{id} | <li>firstname</li><li>lastname</li><li>phone</li><li>address</li> | UserController@update |
+| DELETE | /api/users/{id} | none | UserController@destroy | 
+| POST | /api/auth/login | <li>username</li><li>password</li> | AuthController@login |
+| POST | /api/auth/logout | <li>Authorization Bearer token in header</li> | AuthController@logout |
+| POST | /api/auth/refresh | <li>Authorization Bearer token in header</li> | AuthController@refresh |
