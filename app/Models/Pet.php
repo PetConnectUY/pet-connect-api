@@ -21,9 +21,4 @@ class Pet extends Model
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
-
-    public function images()
-    {
-        return $this->hasMany(PetImage::class, 'pet_id', 'id');
-    }
 }

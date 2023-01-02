@@ -57,6 +57,7 @@ class PetController extends Controller
     private function jsonResponse($data)
     {
         return [
+            'id' => $data->id,
             'name' => $data->name,
             'birth_year' => $data->birth_year,
             'user' => [
@@ -66,8 +67,7 @@ class PetController extends Controller
                 'username' => $data->user->username,
                 'phone' => $data->user->phone,
                 'address' => $data->user->address
-            ],
-            'images' => $data->images
+            ]
         ];
     }
 }
