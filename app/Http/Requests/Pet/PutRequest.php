@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\Pet;
 
 use App\Traits\ApiResponser;
 use Illuminate\Foundation\Http\FormRequest;
@@ -28,24 +28,19 @@ class PutRequest extends FormRequest
     public function rules()
     {
         return [
-            'firstname' => ['required', 'min:3', 'max:16'],
-            'lastname' => ['required', 'min:3', 'max:16'],
-            'phone' => ['required'],
-            'address' => ['required']
+            'name' => ['required', 'min:3'],
+            'birth_year' => 'nullable',
+            'user_id' => ['exists:users'],
         ];
     }
 
     public function messages()
     {
         return [
-            'firstname.required' => 'El nombre es requerido.',
-            'firstname.min' => 'Son necesarios 3 caracteres para el nombre.',
-            'firstname.max' => 'El máximo de caracteres para el nombre es de 16.',
-            'lastname.required' => 'El apellido es requerido.',
-            'lastname.min' => 'Son necesarios 3 caracteres para el apellido.',
-            'lastname.max' => 'El máximo de caracteres para el apellido es de 16.',
-            'phone.required' => 'El número de contacto es necesario.',
-            'address.required' => 'La dirección es necesaria.',
+            'name.required' => 'El nombre de la mascota es requerido.',
+            'name.min' => 'El nombre de la mascota debe contener como minimo 3 caracteres.',
+            'user_id.required' => 'El usuario es requerido',
+            'user_id.exists' => 'El usuario no existe.',
         ];
     }
 

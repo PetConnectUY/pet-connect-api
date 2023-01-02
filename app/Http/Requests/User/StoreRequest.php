@@ -38,6 +38,28 @@ class StoreRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            'firstname.required' => 'El nombre es requerido.',
+            'firstname.min' => 'Son necesarios 3 caracteres para el nombre.',
+            'firstname.max' => 'El máximo de caracteres para el nombre es de 16.',
+            'lastname.required' => 'El apellido es requerido.',
+            'lastname.min' => 'Son necesarios 3 caracteres para el apellido.',
+            'lastname.max' => 'El máximo de caracteres para el apellido es de 16.',
+            'username.required' => 'El nombre de usuario es requerido.',
+            'username.min' => 'Son necesarios 3 caracteres para el nombre de usuario.',
+            'username.max' => 'El máximo de caracteres para el nombre de usuarios es de 16',
+            'username.unique' => 'El nombre de usuario ya esta registrado.',
+            'email.required' => 'El email es requerido.',
+            'email.email' => 'El formato del email es incorrecto.',
+            'password.required' => 'La contraseña es requerida.',
+            'password.min' => 'Son necesarios 6 caracteres para la contraseña.',
+            'phone.required' => 'El número de contacto es necesario.',
+            'address.required' => 'La dirección es necesaria.',
+        ];
+    }
+
     public function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
         $response = $this->errorResponse($validator->errors(), Response::HTTP_BAD_REQUEST);
