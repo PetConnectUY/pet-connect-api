@@ -13,6 +13,15 @@ class PetImage extends Model
 
     protected $fillable = [
         'pet_id',
-        'name'
+        'name',
+        'cover_image'
     ];
+
+    const CREATED_AT = null;
+    const UPDATED_AT = null;
+
+    public function pet()
+    {
+        return $this->hasOne(Pet::class, 'id', 'pet_id');
+    }
 }
