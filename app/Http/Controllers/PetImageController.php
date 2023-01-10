@@ -35,7 +35,6 @@ class PetImageController extends Controller
             }
         }
         $image->cover_image = $request->validated('cover_image');
-        $image->load('pet');
         $image->save();
         
         return $this->successResponse($this->jsonResponse($image));
@@ -75,10 +74,7 @@ class PetImageController extends Controller
     {
         return [
             'id' => $data->id,
-            'pet' => [
-                'id' => $data->pet->id,
-                'name' => $data->pet->name,
-            ],
+            'pet_id' => $data->pet_id,
             'name' => $data->name,
             'cover_image' => $data->cover_image
         ];

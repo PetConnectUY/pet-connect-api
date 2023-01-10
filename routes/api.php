@@ -30,7 +30,7 @@ Route::group(['prefix' => 'auth'], function(){
 
 Route::group([
     'prefix' => 'users',
-    'middleware' => 'jwt.auth',
+
 ], function(){
     Route::controller(UserController::class)->group(function(){
         Route::post('', 'store');
