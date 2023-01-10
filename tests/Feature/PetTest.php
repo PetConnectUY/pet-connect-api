@@ -18,7 +18,10 @@ class PetTest extends TestCase
     {
         $petData = [
             'name' => 'Test store',
-            'birth_year' => 2022,
+            'birth_date' => '2022-07-20',
+            'race' => 'unknow',
+            'gender' => 'female',
+            'pet_information' => 'test',
         ];
 
         $this->withAuth()
@@ -27,12 +30,16 @@ class PetTest extends TestCase
             ->assertExactJson([
                 'id' => 1,
                 'name' => $petData['name'],
-                'birth_year' => $petData['birth_year'],
+                'birth_date' => $petData['birth_date'],
+                'race' => $petData['race'],
+                'gender' => $petData['gender'],
+                'pet_information' => $petData['pet_information'],
                 'user' => [
                     'id' => auth()->user()->id,
                     'firstname' => auth()->user()->firstname,
                     'lastname' => auth()->user()->lastname,
                     'username' => auth()->user()->username,
+                    'birth_date' => auth()->user()->birth_date,
                     'phone' => auth()->user()->phone,
                     'address' => auth()->user()->address
                 ]
@@ -43,7 +50,10 @@ class PetTest extends TestCase
     {
         $petData = [
             'name' => 'Test store',
-            'birth_year' => 2022,
+            'birth_date' => '2022-07-20',
+            'race' => 'unknow',
+            'gender' => 'female',
+            'pet_information' => 'test',
         ];
 
         $pet = $this->withAuth()
@@ -52,7 +62,10 @@ class PetTest extends TestCase
 
         $updateData = [
             'name' => 'Test Update',
-            'birth_year' => 0000,
+            'birth_date' => '2020-02-02',
+            'race' => 'asdas',
+            'gender' => 'male',
+            'pet_information' => 'adsdas',
         ];
 
         $this->withAuth()
@@ -61,12 +74,16 @@ class PetTest extends TestCase
             ->assertExactJson([
                 'id' => $pet['id'],
                 'name' => $updateData['name'],
-                'birth_year' => $updateData['birth_year'],
+                'birth_date' => $updateData['birth_date'],
+                'race' => $updateData['race'],
+                'gender' => $updateData['gender'],
+                'pet_information' => $updateData['pet_information'],
                 'user' => [
                     'id' => auth()->user()->id,
                     'firstname' => auth()->user()->firstname,
                     'lastname' => auth()->user()->lastname,
                     'username' => auth()->user()->username,
+                    'birth_date' => auth()->user()->birth_date,
                     'phone' => auth()->user()->phone,
                     'address' => auth()->user()->address
                 ]
@@ -76,8 +93,11 @@ class PetTest extends TestCase
     public function test_destroy_pet()
     {
         $petData = [
-            'name' => 'Test store',
-            'birth_year' => 2022,
+            'name' => 'Test Update',
+            'birth_date' => '2020-02-02',
+            'race' => 'asdas',
+            'gender' => 'male',
+            'pet_information' => 'adsdas',
         ];
 
         $auth = $this->withAuth();
@@ -90,12 +110,16 @@ class PetTest extends TestCase
             ->assertExactJson([
                 'id' => $pet['id'],
                 'name' => $pet['name'],
-                'birth_year' => $pet['birth_year'],
+                'birth_date' => $pet['birth_date'],
+                'race' => $pet['race'],
+                'gender' => $pet['gender'],
+                'pet_information' => $pet['pet_information'],
                 'user' => [
                     'id' => auth()->user()->id,
                     'firstname' => auth()->user()->firstname,
                     'lastname' => auth()->user()->lastname,
                     'username' => auth()->user()->username,
+                    'birth_date' => auth()->user()->birth_date,
                     'phone' => auth()->user()->phone,
                     'address' => auth()->user()->address
                 ]

@@ -16,7 +16,10 @@ return new class extends Migration
         Schema::create('pets', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('birth_year')->nullable();
+            $table->date('birth_date')->nullable();
+            $table->string('race');
+            $table->string('gender');
+            $table->text('pet_information');
             $table->foreignId('user_id')
                 ->constrained('users', 'id');
             $table->timestamps();

@@ -21,6 +21,7 @@ class UserController extends Controller
             'username' => $request->validated('username'),
             'email' => $request->validated('email'),
             'password' => Hash::make($request->validated('password')),
+            'birth_date' => $request->validated('birth_date'),
             'phone' => $request->validated('phone'),
             'address' => $request->validated('address')
         ]);
@@ -38,6 +39,7 @@ class UserController extends Controller
         $user->update([
             'firstname' => $request->validated('firstname'),
             'lastname' => $request->validated('lastname'),
+            'birth_date' => $request->validated('birth_date'),
             'phone' => $request->validated('phone'),
             'address' => $request->validated('address')
         ]);
@@ -65,6 +67,7 @@ class UserController extends Controller
             'lastname' => $data->lastname,
             'username' => $data->username,
             'email' => $data->email,
+            'birth_date' => $data->birth_date,
             'phone' => $data->phone,
             'address' => $data->address,
         ];

@@ -30,6 +30,7 @@ class PutRequest extends FormRequest
         return [
             'firstname' => ['required', 'min:3', 'max:16'],
             'lastname' => ['required', 'min:3', 'max:16'],
+            'birth_date' => ['required', 'date'],
             'phone' => ['required'],
             'address' => ['required']
         ];
@@ -44,6 +45,8 @@ class PutRequest extends FormRequest
             'lastname.required' => 'El apellido es requerido.',
             'lastname.min' => 'Son necesarios 3 caracteres para el apellido.',
             'lastname.max' => 'El máximo de caracteres para el apellido es de 16.',
+            'birth_date.required' => 'La fecha de nacimiento es requerida',
+            'birth_date.date' => 'El formato de la fecha es incorrecto',
             'phone.required' => 'El número de contacto es necesario.',
             'address.required' => 'La dirección es necesaria.',
         ];

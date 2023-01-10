@@ -5,6 +5,7 @@ namespace App\Http\Requests\Pet;
 use App\Traits\ApiResponser;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class PutRequest extends FormRequest
@@ -29,7 +30,10 @@ class PutRequest extends FormRequest
     {
         return [
             'name' => ['required', 'min:3'],
-            'birth_year' => 'nullable',
+            'birth_date' => ['nullable', 'date'],
+            'race' => ['required'],
+            'gender' => ['required', Rule::in(['male', 'female'])],
+            'pet_information' => ['required'],
             'user_id' => ['exists:users'],
         ];
     }
@@ -39,6 +43,11 @@ class PutRequest extends FormRequest
         return [
             'name.required' => 'El nombre de la mascota es requerido.',
             'name.min' => 'El nombre de la mascota debe contener como minimo 3 caracteres.',
+            'birth_date.date' => 'El formato de la fecha de nacimiento es incorrecto',
+            'race.required' => 'La raza es requerida',
+            'gender.required' => 'El género es requerido.',
+            'gender.in' => 'El formato del género es incorrecto.',
+            'pet_information.required' => 'La información de la mascota es requerida.',
             'user_id.required' => 'El usuario es requerido',
             'user_id.exists' => 'El usuario no existe.',
         ];

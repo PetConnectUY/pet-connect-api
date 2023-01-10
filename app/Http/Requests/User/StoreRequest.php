@@ -33,6 +33,7 @@ class StoreRequest extends FormRequest
             'username' => ['required', 'min:3', 'max:16', 'unique:users,username'],
             'email' => ['required', 'email'],
             'password' => ['required', 'min:6'],
+            'birth_date' => ['required', 'date'],
             'phone' => ['required'],
             'address' => ['required'],
         ];
@@ -55,6 +56,8 @@ class StoreRequest extends FormRequest
             'email.email' => 'El formato del email es incorrecto.',
             'password.required' => 'La contraseña es requerida.',
             'password.min' => 'Son necesarios 6 caracteres para la contraseña.',
+            'birth_date.required' => 'La fecha de nacimiento es requerida',
+            'birth_date.date' => 'El formato de la fecha es incorrecto',
             'phone.required' => 'El número de contacto es necesario.',
             'address.required' => 'La dirección es necesaria.',
         ];

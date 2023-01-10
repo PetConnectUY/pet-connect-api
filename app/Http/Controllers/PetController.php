@@ -16,7 +16,10 @@ class PetController extends Controller
     {
         $pet = Pet::create([
             'name' => $request->validated('name'),
-            'birth_year' => $request->validated('birth_year'),
+            'birth_date' => $request->validated('birth_date'),
+            'race' => $request->validated('race'),
+            'gender' => $request->validated('gender'),
+            'pet_information' => $request->validated('pet_information'),
             'user_id' => auth()->user()->id,
         ]);
         $pet->load('user');
@@ -34,7 +37,10 @@ class PetController extends Controller
 
         $pet->update([
             'name' => $request->validated('name'),
-            'birth_year' => $request->validated('birth_year'),
+            'birth_date' => $request->validated('birth_date'),
+            'race' => $request->validated('race'),
+            'gender' => $request->validated('gender'),
+            'pet_information' => $request->validated('pet_information'),
             'user_id' => auth()->user()->id,
         ]);
 
@@ -59,12 +65,16 @@ class PetController extends Controller
         return [
             'id' => $data->id,
             'name' => $data->name,
-            'birth_year' => $data->birth_year,
+            'birth_date' => $data->birth_date,
+            'race' => $data->race,
+            'gender' => $data->gender,
+            'pet_information' => $data->pet_information,
             'user' => [
                 'id' => $data->user->id,
                 'firstname' => $data->user->firstname,
                 'lastname' => $data->user->lastname,
                 'username' => $data->user->username,
+                'birth_date' => $data->user->birth_date,
                 'phone' => $data->user->phone,
                 'address' => $data->user->address
             ]

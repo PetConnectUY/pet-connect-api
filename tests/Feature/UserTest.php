@@ -24,6 +24,7 @@ class UserTest extends TestCase
             'username' => 'userTest',
             'email' => 'userTest@user.com',
             'password' => 'password',
+            'birth_date' => '2000-02-20',
             'phone' => '096390295',
             'address' => 'userTest'
         ];
@@ -37,6 +38,7 @@ class UserTest extends TestCase
                 'lastname' => $response['lastname'],
                 'username' => $response['username'],
                 'email' => $response['email'],
+                'birth_date' => $response['birth_date'],
                 'phone' => $response['phone'],
                 'address' => $response['address'],
             ]);
@@ -57,6 +59,7 @@ class UserTest extends TestCase
         $updateData = [
             'firstname' => 'updateTest',
             'lastname' => 'updateTest',
+            'birth_date' => '2000-02-20',
             'phone' => '096390295',
             'address' => 'updateTest'
         ];
@@ -70,6 +73,7 @@ class UserTest extends TestCase
                 'lastname' => $updateData['lastname'],
                 'username' => $user->username,
                 'email' => $user->email,
+                'birth_date' => $updateData['birth_date'],
                 'phone' => $updateData['phone'],
                 'address' => $updateData['address']
             ]);
@@ -96,6 +100,7 @@ class UserTest extends TestCase
                 'lastname' => $user->lastname,
                 'username' => $user->username,
                 'email' => $user->email,
+                'birth_date' => $user->birth_date,
                 'phone' => $user->phone,
                 'address' => $user->address,
             ]);
