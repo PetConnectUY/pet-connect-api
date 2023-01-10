@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
@@ -25,6 +26,7 @@ class PetImageTest extends TestCase
         $image = Image::make($file->path());
         Storage::put('test.png', $image->stream());
 
+        $user = User::factory()->create();
 
         $petData = [
             'name' => 'Test store',
@@ -32,6 +34,7 @@ class PetImageTest extends TestCase
             'race' => 'unknow',
             'gender' => 'female',
             'pet_information' => 'test',
+            'user_id' => $user->id
         ];
 
         $pet = $this->withAuth()
@@ -63,6 +66,7 @@ class PetImageTest extends TestCase
         $image = Image::make($file->path());
         Storage::put('test.png', $image->stream());
 
+        $user = User::factory()->create();
 
         $petData = [
             'name' => 'Test store',
@@ -70,6 +74,7 @@ class PetImageTest extends TestCase
             'race' => 'unknow',
             'gender' => 'female',
             'pet_information' => 'test',
+            'user_id' => $user->id
         ];
 
         $pet = $this->withAuth()
@@ -107,7 +112,8 @@ class PetImageTest extends TestCase
         $file = UploadedFile::fake()->image('test.png');
         $image = Image::make($file->path());
         Storage::put('test.png', $image->stream());
-
+        
+        $user = User::factory()->create();
 
         $petData = [
             'name' => 'Test store',
@@ -115,6 +121,7 @@ class PetImageTest extends TestCase
             'race' => 'unknow',
             'gender' => 'female',
             'pet_information' => 'test',
+            'user_id' => $user->id
         ];
 
         $pet = $this->withAuth()

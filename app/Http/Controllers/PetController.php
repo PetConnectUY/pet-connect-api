@@ -20,7 +20,7 @@ class PetController extends Controller
             'race' => $request->validated('race'),
             'gender' => $request->validated('gender'),
             'pet_information' => $request->validated('pet_information'),
-            'user_id' => auth()->user()->id,
+            'user_id' => $request->validated('user_id'),
         ]);
         $pet->load('user');
 
@@ -41,7 +41,7 @@ class PetController extends Controller
             'race' => $request->validated('race'),
             'gender' => $request->validated('gender'),
             'pet_information' => $request->validated('pet_information'),
-            'user_id' => auth()->user()->id,
+            'user_id' => $request->validated('user_id'),
         ]);
 
         return $this->successResponse($this->jsonResponse($pet));

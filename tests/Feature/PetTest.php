@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
@@ -16,12 +17,14 @@ class PetTest extends TestCase
 
     public function test_store_pet()
     {
+        $user = User::factory()->create();
         $petData = [
             'name' => 'Test store',
             'birth_date' => '2022-07-20',
             'race' => 'unknow',
             'gender' => 'female',
             'pet_information' => 'test',
+            'user_id' => $user->id,
         ];
 
         $this->withAuth()
@@ -35,25 +38,28 @@ class PetTest extends TestCase
                 'gender' => $petData['gender'],
                 'pet_information' => $petData['pet_information'],
                 'user' => [
-                    'id' => auth()->user()->id,
-                    'firstname' => auth()->user()->firstname,
-                    'lastname' => auth()->user()->lastname,
-                    'username' => auth()->user()->username,
-                    'birth_date' => auth()->user()->birth_date,
-                    'phone' => auth()->user()->phone,
-                    'address' => auth()->user()->address
+                    'id' => $user->id,
+                    'firstname' => $user->firstname,
+                    'lastname' => $user->lastname,
+                    'username' => $user->username,
+                    'birth_date' => $user->birth_date,
+                    'phone' => $user->phone,
+                    'address' => $user->address
                 ]
             ]);
     }
 
     public function test_update_pet()
     {
+        $user = User::factory()->create();
+
         $petData = [
             'name' => 'Test store',
             'birth_date' => '2022-07-20',
             'race' => 'unknow',
             'gender' => 'female',
             'pet_information' => 'test',
+            'user_id' => 1,
         ];
 
         $pet = $this->withAuth()
@@ -66,6 +72,7 @@ class PetTest extends TestCase
             'race' => 'asdas',
             'gender' => 'male',
             'pet_information' => 'adsdas',
+            'user_id' => $user->id,
         ];
 
         $this->withAuth()
@@ -79,28 +86,30 @@ class PetTest extends TestCase
                 'gender' => $updateData['gender'],
                 'pet_information' => $updateData['pet_information'],
                 'user' => [
-                    'id' => auth()->user()->id,
-                    'firstname' => auth()->user()->firstname,
-                    'lastname' => auth()->user()->lastname,
-                    'username' => auth()->user()->username,
-                    'birth_date' => auth()->user()->birth_date,
-                    'phone' => auth()->user()->phone,
-                    'address' => auth()->user()->address
+                    'id' => $user->id,
+                    'firstname' => $user->firstname,
+                    'lastname' => $user->lastname,
+                    'username' => $user->username,
+                    'birth_date' => $user->birth_date,
+                    'phone' => $user->phone,
+                    'address' => $user->address
                 ]
             ]);
     }
 
     public function test_destroy_pet()
     {
+        $user = User::factory()->create();
+        $auth = $this->withAuth();
+
         $petData = [
             'name' => 'Test Update',
             'birth_date' => '2020-02-02',
             'race' => 'asdas',
             'gender' => 'male',
             'pet_information' => 'adsdas',
+            'user_id' => $user->id,
         ];
-
-        $auth = $this->withAuth();
 
         $pet = $auth->post(self::PET_URL, $petData)
             ->assertStatus(Response::HTTP_OK);
@@ -115,13 +124,13 @@ class PetTest extends TestCase
                 'gender' => $pet['gender'],
                 'pet_information' => $pet['pet_information'],
                 'user' => [
-                    'id' => auth()->user()->id,
-                    'firstname' => auth()->user()->firstname,
-                    'lastname' => auth()->user()->lastname,
-                    'username' => auth()->user()->username,
-                    'birth_date' => auth()->user()->birth_date,
-                    'phone' => auth()->user()->phone,
-                    'address' => auth()->user()->address
+                    'id' => $user->id,
+                    'firstname' => $user->firstname,
+                    'lastname' => $user->lastname,
+                    'username' => $user->username,
+                    'birth_date' => $user->birth_date,
+                    'phone' => $user->phone,
+                    'address' => $user->address
                 ]
             ]);
     }

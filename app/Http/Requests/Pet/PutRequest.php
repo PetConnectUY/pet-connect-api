@@ -34,7 +34,7 @@ class PutRequest extends FormRequest
             'race' => ['required'],
             'gender' => ['required', Rule::in(['male', 'female'])],
             'pet_information' => ['required'],
-            'user_id' => ['exists:users'],
+            'user_id' => ['required', 'exists:users,id'],
         ];
     }
 
