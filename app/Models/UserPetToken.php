@@ -42,7 +42,12 @@ class UserPetToken extends Model
                     'email' => $this->pet->user->email,
                     'birth_date' => $this->pet->user->birth_date,
                     'phone' => $this->pet->user->phone,
-                    'address' => $this->pet->user->address
+                    'address' => $this->pet->user->address,
+                    'role' => [
+                        'id' => $this->pet->user->role->id,
+                        'name' => $this->pet->user->role->name,
+                        'description' => $this->pet->user->role->description
+                    ]
                 ],
             ],
         ];

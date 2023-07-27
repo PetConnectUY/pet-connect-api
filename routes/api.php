@@ -76,7 +76,8 @@ Route::group([
 Route::group([
     'prefix' => 'users-pets-tokens',
     'middleware' => [
-        'jwt.auth'
+        'jwt.auth',
+        'role.limits'
     ]
 ], function(){
     Route::post('', [UserPetTokenController::class, 'generateQRCode']);

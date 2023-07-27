@@ -42,7 +42,12 @@ class Pet extends Model
                 'email' => $this->user->email,
                 'birth_date' => $this->user->birth_date,
                 'phone' => $this->user->phone,
-                'address' => $this->user->address
+                'address' => $this->user->address,
+                'role' => [
+                    'id' => $this->user->role->id,
+                    'name' => $this->user->role->name,
+                    'description' => $this->user->role->description
+                ]
             ]
         ];
     }
