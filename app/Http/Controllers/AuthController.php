@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Traits\ApiResponser;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -13,13 +14,20 @@ class AuthController extends Controller
 
     public function login()
     {
-        $credentials = request(['username', 'password']);
-        if(! $token = auth()->attempt($credentials))
+        try
         {
-            return $this->errorResponse('Error username or password.', Response::HTTP_UNAUTHORIZED);
+            $credentials = request(['username', 'password']);
+            if(! $token = auth()->attempt($credentials))
+            {
+                return $this->errorResponse('Error username or password.', Response::HTTP_UNAUTHORIZED);
+            }
+            
+            return $this->respondWithToken($token);
         }
-        
-        return $this->respondWithToken($token);
+        catch(Exception $e)
+        {
+            return $this->errorResponse('Ocurrió un error al iniciar sesión', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function logout()

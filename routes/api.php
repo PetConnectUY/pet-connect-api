@@ -1,11 +1,11 @@
 <?php
 
+use App\Classes\UserRole;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PetController;
 use App\Http\Controllers\PetImageController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,12 +31,11 @@ Route::group(['prefix' => 'auth'], function(){
 
 Route::group([
     'prefix' => 'users',
-    'middleware' => 'jwt.auth',
 ], function(){
-    Route::controller(UserController::class)->group(function(){
-        Route::post('', 'store');
-        Route::post('/{id}', 'update');
-        Route::delete('/{id}', 'destroy');
+    Route::post('', [UserController::class, 'store']);
+    Route::group(['middleware' => ['jwt.auth']], function() {
+        Route::post('/{id}', [UserController::class, 'update']);
+        Route::delete('/{id}', [UserController::class, 'destroy']);
     });
 });
 
@@ -62,5 +61,13 @@ Route::group([
     });
 });
 
-Route::resource('roles', RoleController::class)
-    ->middleware('jwt.auth');
+Route::group([
+    'prefix' => 'roles',
+    'middleware' => [
+        'jwt.auth',
+        'role.checker:'.implode(',', [UserRole::ADMIN_ROLE])
+    ],
+], function(){
+    Route::post('', [RoleController::class, 'store']);
+    Route::delete('/{id}', [RoleController::class, 'destroy']);
+});

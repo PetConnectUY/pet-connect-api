@@ -18,13 +18,43 @@ class RoleController extends Controller
         try
         {
             DB::beginTransaction();
-            $role = Role::create($request->validated());
+            $role = Role::create([
+                'name' => $request->validated('name'),
+                'description' => $request->validated('description')
+            ]);
+
+            DB::commit();
 
             return $this->successResponse($role);
         }
         catch(Exception $e)
         {
+            DB::rollBack();
             return $this->errorResponse('Error creando el rol. '.$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try
+        {
+            DB::beginTransaction();
+            $role = Role::find($id);
+
+            if(is_null($role))
+            {
+                return $this->errorResponse('Rol no encontrado', Response::HTTP_NOT_FOUND);
+            }
+            
+            $role->delete();
+            DB::commit();
+
+            return $this->successResponse($role);
+        }
+        catch(Exception $e)
+        {
+            DB::rollBack();
+            return $this->errorResponse('Ocurrió un error al eliminar el rol'. $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

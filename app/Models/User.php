@@ -50,13 +50,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function role()
     {
-        return $this->hasOneThrough(
-            Role::class,
-            UserRole::class,
-            'user_id',
-            'id',
-            'id'
-        );
+        return $this->hasOneThrough(Role::class, UserRole::class, 'user_id', 'id', 'id', 'role_id');
     }
 
     public function toArray()
