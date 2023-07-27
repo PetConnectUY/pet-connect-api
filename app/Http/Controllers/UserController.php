@@ -5,28 +5,48 @@ namespace App\Http\Controllers;
 use App\Http\Requests\User\PutRequest;
 use App\Http\Requests\User\StoreRequest;
 use App\Models\User;
+use App\Models\UserRole;
 use App\Traits\ApiResponser;
-use Illuminate\Http\Request;
+use Exception;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     use ApiResponser;
+
     public function store(StoreRequest $request)
     {
-        $user = User::create([
-            'firstname' => $request->validated('firstname'),
-            'lastname' => $request->validated('lastname'),
-            'username' => $request->validated('username'),
-            'email' => $request->validated('email'),
-            'password' => Hash::make($request->validated('password')),
-            'birth_date' => $request->validated('birth_date'),
-            'phone' => $request->validated('phone'),
-            'address' => $request->validated('address')
-        ]);
+        try
+        {
+            DB::beginTransaction();
 
-        return $this->successResponse($this->jsonResponse($user));
+            $user = User::create([
+                'firstname' => $request->validated('firstname'),
+                'lastname' => $request->validated('lastname'),
+                'username' => $request->validated('username'),
+                'email' => $request->validated('email'),
+                'password' => Hash::make($request->validated('password')),
+                'birth_date' => $request->validated('birth_date'),
+                'phone' => $request->validated('phone'),
+                'address' => $request->validated('address')
+            ]);
+
+            UserRole::create([
+                'user_id' => $user->id,
+                'role_id' => UserRole::USER_ROLE_ID,
+            ]);
+
+            DB::commit();
+
+            return $this->successResponse($user);
+        }
+        catch(Exception $e)
+        {
+            DB::rollBack();
+            return $this->errorResponse('Ocurrió un error al registrar el usuario. '.$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function update(PutRequest $request, $id)

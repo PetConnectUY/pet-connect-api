@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PetController;
 use App\Http\Controllers\PetImageController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -60,3 +61,6 @@ Route::group([
         Route::delete('/{id}', 'destroy');
     });
 });
+
+Route::resource('roles', RoleController::class)
+    ->middleware('jwt.auth');

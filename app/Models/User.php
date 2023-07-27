@@ -47,4 +47,34 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function role()
+    {
+        return $this->hasOneThrough(
+            Role::class,
+            UserRole::class,
+            'user_id',
+            'id',
+            'id'
+        );
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'firstname' => $this->firstname,
+            'lastname' => $this->lastname,
+            'username' => $this->username,
+            'email' => $this->email,
+            'birth_date' => $this->birth_date,
+            'phone' => $this->phone,
+            'address' => $this->address,
+            'role' => [
+                'id' => $this->role->id,
+                'name' => $this->role->name,
+                'description' => $this->role->description
+            ]
+        ];
+    }
 }
