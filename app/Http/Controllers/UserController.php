@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\UserRole as ClassesUserRole;
 use App\Http\Requests\User\PutRequest;
 use App\Http\Requests\User\StoreRequest;
 use App\Models\User;
@@ -36,7 +35,7 @@ class UserController extends Controller
 
             UserRole::create([
                 'user_id' => $user->id,
-                'role_id' => ClassesUserRole::USER_ROLE,
+                'role_id' => UserRole::USER_ROLE_ID,
             ]);
 
             DB::commit();

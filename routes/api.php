@@ -77,8 +77,12 @@ Route::group([
     'prefix' => 'users-pets-tokens',
     'middleware' => [
         'jwt.auth',
-        'role.limits'
     ]
 ], function(){
-    Route::post('', [UserPetTokenController::class, 'generateQRCode']);
+    Route::delete('/{id}', [UserPetTokenController::class, 'destroy']);
+    Route::get('/', [UserPetTokenController::class, 'trashed']);
+    Route::group(['middleware' => ['role.limits']], function(){
+        Route::post('', [UserPetTokenController::class, 'generateToken']);
+        Route::post('/{id}/restore', [UserPetTokenController::class, 'restoreTrashed']);
+    });
 });
