@@ -45,6 +45,8 @@ Route::group([
     'middleware' => 'jwt.auth',
 ], function(){
     Route::controller(PetController::class)->group(function(){
+        Route::get('', 'index');
+        Route::get('/{id}', 'view');
         Route::post('', 'store');
         Route::post('/{id}', 'update');
         Route::delete('/{id}', 'destroy');

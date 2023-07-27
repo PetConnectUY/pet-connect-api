@@ -11,6 +11,34 @@ class PetController extends Controller
 {
     use ApiResponser;
 
+    public function index()
+    {
+        $pets = Pet::whereHas('user', function($query){
+            $query->where('deleted_at', null);
+        })
+        ->where('user_id', auth()->user()->id)
+        ->paginate(10);
+
+        return $this->successResponse($pets);
+    }
+
+    public function view($id)
+    {
+        $pet = Pet::whereHas('user', function($query) {
+            $query->where('deleted_at', null);
+        })
+        ->where('user_id', auth()->user()->id)
+        ->where('id', $id)
+        ->first();
+
+        if(is_null($pet))
+        {
+            return $this->errorResponse('No se encontro la mascota', Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->successResponse($pet);
+    }
+
     public function store(PetRequest $request)
     {
         $pet = Pet::create([

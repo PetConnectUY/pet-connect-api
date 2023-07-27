@@ -56,15 +56,25 @@ class UserController extends Controller
         {
             return $this->errorResponse('User not found', Response::HTTP_NOT_FOUND);
         }
-        $user->update([
-            'firstname' => $request->validated('firstname'),
-            'lastname' => $request->validated('lastname'),
-            'birth_date' => $request->validated('birth_date'),
-            'phone' => $request->validated('phone'),
-            'address' => $request->validated('address')
-        ]);
+        try
+        {
+            DB::beginTransaction();
 
-        return $this->successResponse($this->jsonResponse($user));
+            $user->update([
+                'firstname' => $request->validated('firstname'),
+                'lastname' => $request->validated('lastname'),
+                'birth_date' => $request->validated('birth_date'),
+                'phone' => $request->validated('phone'),
+                'address' => $request->validated('address')
+            ]);
+
+            DB::commit();
+            return $this->successResponse($user);
+        }
+        catch(Exception $e)
+        {
+            return $this->errorResponse('Ocurrió un error al actualizar el usuario', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function destroy($id)
@@ -74,9 +84,18 @@ class UserController extends Controller
         {
             return $this->errorResponse('User not found', Response::HTTP_NOT_FOUND);
         }
-        $user->delete();
+        try
+        {
+            DB::beginTransaction();
+            $user->delete();
+            DB::commit();
 
-        return $this->successResponse($this->jsonResponse($user));
+            return $this->successResponse($user);
+        }
+        catch(Exception $e)
+        {
+            return $this->errorResponse('Ocurrió un error al eliminar el usuario.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     private function jsonResponse($data)

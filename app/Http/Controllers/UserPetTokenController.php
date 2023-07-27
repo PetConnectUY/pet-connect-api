@@ -86,6 +86,7 @@ class UserPetTokenController extends Controller
     {
         try
         {
+            DB::beginTransaction();
             $petToken = UserPetToken::withTrashed()
                 ->whereHas('pet', function($query){
                     $query->where('user_id', auth()->user()->id);
@@ -98,11 +99,13 @@ class UserPetTokenController extends Controller
             }
 
             $petToken->restore();
+            DB::commit();
 
             return $this->successResponse($petToken);
         }
         catch (QueryException $e)
         {
+            DB::rollBack();
             return $this->errorResponse('Ocurrió un error al restaurar el token de mascota', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
