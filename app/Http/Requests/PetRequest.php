@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Pet;
+namespace App\Http\Requests;
 
 use App\Traits\ApiResponser;
 use Illuminate\Foundation\Http\FormRequest;
@@ -8,7 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
-class PutRequest extends FormRequest
+class PetRequest extends FormRequest
 {
     use ApiResponser;
     /**
@@ -34,7 +34,6 @@ class PutRequest extends FormRequest
             'race' => ['required'],
             'gender' => ['required', Rule::in(['male', 'female'])],
             'pet_information' => ['required'],
-            'user_id' => ['required', 'exists:users,id'],
         ];
     }
 
@@ -48,8 +47,6 @@ class PutRequest extends FormRequest
             'gender.required' => 'El género es requerido.',
             'gender.in' => 'El formato del género es incorrecto.',
             'pet_information.required' => 'La información de la mascota es requerida.',
-            'user_id.required' => 'El usuario es requerido',
-            'user_id.exists' => 'El usuario no existe.',
         ];
     }
 

@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Pet\PutRequest;
-use App\Http\Requests\Pet\StoreRequest;
+use App\Http\Requests\PetRequest;
 use App\Models\Pet;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
@@ -12,7 +11,7 @@ class PetController extends Controller
 {
     use ApiResponser;
 
-    public function store(StoreRequest $request)
+    public function store(PetRequest $request)
     {
         $pet = Pet::create([
             'name' => $request->validated('name'),
@@ -22,12 +21,11 @@ class PetController extends Controller
             'pet_information' => $request->validated('pet_information'),
             'user_id' => auth()->user()->id,
         ]);
-        $pet->load('user');
 
-        return $this->successResponse($this->jsonResponse($pet));
+        return $this->successResponse($pet);
     }
 
-    public function update(PutRequest $request, $id)
+    public function update(PetRequest $request, $id)
     {
         $pet = Pet::find($id);
         if(!$pet)
@@ -41,10 +39,10 @@ class PetController extends Controller
             'race' => $request->validated('race'),
             'gender' => $request->validated('gender'),
             'pet_information' => $request->validated('pet_information'),
-            'user_id' => $request->validated('user_id'),
+            'user_id' => auth()->user()->id,
         ]);
 
-        return $this->successResponse($this->jsonResponse($pet));
+        return $this->successResponse($pet);
     }
 
     public function destroy($id)
@@ -57,27 +55,6 @@ class PetController extends Controller
 
         $pet->delete();
 
-        return $this->successResponse($this->jsonResponse($pet));
-    }
-
-    private function jsonResponse($data)
-    {
-        return [
-            'id' => $data->id,
-            'name' => $data->name,
-            'birth_date' => $data->birth_date,
-            'race' => $data->race,
-            'gender' => $data->gender,
-            'pet_information' => $data->pet_information,
-            'user' => [
-                'id' => $data->user->id,
-                'firstname' => $data->user->firstname,
-                'lastname' => $data->user->lastname,
-                'username' => $data->user->username,
-                'birth_date' => $data->user->birth_date,
-                'phone' => $data->user->phone,
-                'address' => $data->user->address
-            ]
-        ];
+        return $this->successResponse($pet);
     }
 }
