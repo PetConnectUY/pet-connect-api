@@ -37,7 +37,7 @@ class PetImageController extends Controller
         $image->cover_image = $request->validated('cover_image');
         $image->save();
         
-        return $this->successResponse($this->jsonResponse($image));
+        return $this->successResponse($image);
     }
 
     public function update(PutRequest $request, $id)
@@ -52,7 +52,7 @@ class PetImageController extends Controller
             'cover_image' => $request->validated('cover_image'),
         ]);
 
-        return $this->successResponse($this->jsonResponse($image));
+        return $this->successResponse($image);
     }
 
     public function destroy($id)
@@ -66,17 +66,6 @@ class PetImageController extends Controller
         $this->deleteImages(env('PET_IMAGES_FOLDER'), $image->name);
         $image->delete();
 
-        return $this->successResponse($this->jsonResponse($image));
-    }
-
-
-    private function jsonResponse($data)
-    {
-        return [
-            'id' => $data->id,
-            'pet_id' => $data->pet_id,
-            'name' => $data->name,
-            'cover_image' => $data->cover_image
-        ];
+        return $this->successResponse($image);
     }
 }

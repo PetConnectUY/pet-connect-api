@@ -20,31 +20,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'auth'], function(){
-    Route::post("login", [AuthController::class, 'login']);
-    Route::group(['middleware' => ['jwt.auth']], function () {
+// Auth routes
+Route::prefix('auth')->group(function () {
+    Route::post('login', [AuthController::class, 'login']);
+    
+    Route::middleware('jwt.auth')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
-    });
-    Route::group(['middleware' => 'jwt.refresh'], function () {
         Route::post('refresh', [AuthController::class, 'refresh']);
     });
 });
 
-Route::group([
-    'prefix' => 'users',
-], function(){
+// Users routes
+Route::prefix('users')->group(function () {
     Route::post('', [UserController::class, 'store']);
-    Route::group(['middleware' => ['jwt.auth']], function() {
+    
+    Route::middleware('jwt.auth')->group(function () {
         Route::post('/{id}', [UserController::class, 'update']);
         Route::delete('/{id}', [UserController::class, 'destroy']);
     });
 });
 
-Route::group([
-    'prefix' => 'pets',
-    'middleware' => 'jwt.auth',
-], function(){
-    Route::controller(PetController::class)->group(function(){
+// Pets routes
+Route::prefix('pets')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::USER_ROLE, UserRole::PREMIUM_ROLE, UserRole::ADMIN_ROLE])])->group(function () {
+    Route::controller(PetController::class)->group(function () {
         Route::get('', 'index');
         Route::get('/{id}', 'view');
         Route::post('', 'store');
@@ -53,37 +51,27 @@ Route::group([
     });
 });
 
-Route::group([
-    'prefix' => 'pets-images',
-    'middleware' => 'jwt.auth',
-], function(){
-    Route::controller(PetImageController::class)->group(function(){
+// Pet Images routes
+Route::prefix('pets-images')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::USER_ROLE, UserRole::PREMIUM_ROLE, UserRole::ADMIN_ROLE])])->group(function () {
+    Route::controller(PetImageController::class)->group(function () {
         Route::post('', 'store');
         Route::post('/{id}', 'update');
         Route::delete('/{id}', 'destroy');
     });
 });
 
-Route::group([
-    'prefix' => 'roles',
-    'middleware' => [
-        'jwt.auth',
-        'role.checker:'.implode(',', [UserRole::ADMIN_ROLE])
-    ],
-], function(){
+// Roles routes
+Route::prefix('roles')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::ADMIN_ROLE])])->group(function () {
     Route::post('', [RoleController::class, 'store']);
     Route::delete('/{id}', [RoleController::class, 'destroy']);
 });
 
-Route::group([
-    'prefix' => 'users-pets-tokens',
-    'middleware' => [
-        'jwt.auth',
-    ]
-], function(){
+// Users Pets Tokens routes
+Route::prefix('users-pets-tokens')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::USER_ROLE, UserRole::PREMIUM_ROLE, UserRole::ADMIN_ROLE])])->group(function () {
     Route::delete('/{id}', [UserPetTokenController::class, 'destroy']);
     Route::get('/', [UserPetTokenController::class, 'trashed']);
-    Route::group(['middleware' => ['role.limits']], function(){
+    
+    Route::middleware('role.limits')->group(function () {
         Route::post('', [UserPetTokenController::class, 'generateToken']);
         Route::post('/{id}/restore', [UserPetTokenController::class, 'restoreTrashed']);
     });
