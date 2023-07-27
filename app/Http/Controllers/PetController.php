@@ -20,7 +20,7 @@ class PetController extends Controller
             'race' => $request->validated('race'),
             'gender' => $request->validated('gender'),
             'pet_information' => $request->validated('pet_information'),
-            'user_id' => $request->validated('user_id'),
+            'user_id' => auth()->user()->id,
         ]);
         $pet->load('user');
 

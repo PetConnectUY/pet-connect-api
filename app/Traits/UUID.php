@@ -3,9 +3,9 @@ namespace App\Traits;
 
 use Illuminate\Support\Str;
 
-trait File
+trait UUID
 {
-    public function generateFileUniqueName($model, $column)
+    public function generateUUID($model, $column)
     {
         $uuid = Str::uuid()->toString();
         while(!is_null($model::where($column, '=', $uuid)->first())){

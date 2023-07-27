@@ -6,6 +6,7 @@ use App\Http\Controllers\PetController;
 use App\Http\Controllers\PetImageController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserPetTokenController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -70,4 +71,13 @@ Route::group([
 ], function(){
     Route::post('', [RoleController::class, 'store']);
     Route::delete('/{id}', [RoleController::class, 'destroy']);
+});
+
+Route::group([
+    'prefix' => 'users-pets-tokens',
+    'middleware' => [
+        'jwt.auth'
+    ]
+], function(){
+    Route::post('', [UserPetTokenController::class, 'generateQRCode']);
 });

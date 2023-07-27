@@ -6,14 +6,14 @@ use App\Http\Requests\PetImage\PutRequest;
 use App\Http\Requests\PetImage\StoreRequest;
 use App\Models\PetImage;
 use App\Traits\ApiResponser;
-use App\Traits\File;
 use App\Traits\Image;
+use App\Traits\UUID;
 use Exception;
 use Illuminate\Http\Response;
 
 class PetImageController extends Controller
 {
-    use ApiResponser, File, Image;
+    use ApiResponser, UUID, Image;
 
     public function store(StoreRequest $request)
     {
@@ -22,7 +22,7 @@ class PetImageController extends Controller
 
         if($request->has('image'))
         {
-            $imgName = $this->generateFileUniqueName(new PetImage, 'name');
+            $imgName = $this->generateUUID(new PetImage, 'name');
             $imgExtension = $request->file('image')->getClientOriginalExtension();
             try
             {
