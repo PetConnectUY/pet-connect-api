@@ -4,6 +4,7 @@ use App\Classes\UserRole;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PetController;
 use App\Http\Controllers\PetImageController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPetTokenController;
@@ -77,4 +78,11 @@ Route::prefix('users-pets-tokens')->middleware(['jwt.auth', 'role.checker:' . im
         Route::post('', [UserPetTokenController::class, 'generateToken']);
         Route::post('/{id}/restore', [UserPetTokenController::class, 'restoreTrashed']);
     });
+});
+
+//Products routes
+Route::prefix('products')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::ADMIN_ROLE])])->group(function() {
+    Route::get('', [ProductController::class, 'index']);
+    Route::post('', [ProductController::class, 'store']);
+    Route::delete('/{id}', [ProductController::class, 'destroy']);
 });

@@ -1,6 +1,8 @@
 <?php
 return [
-    'User' =>  1,
-    'Premium' => 3,
+    'User' =>  0,
+    'Premium' => 2,
+    'Premium +' => 4,
+    'Affiliate' => 8,
     'Admin' => 9999,
 ];
