@@ -30,7 +30,6 @@ class StoreRequest extends FormRequest
         return [
             'firstname' => ['required', 'min:3', 'max:16'],
             'lastname' => ['required', 'min:3', 'max:16'],
-            'username' => ['required', 'min:3', 'max:16', 'unique:users,username'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'min:6'],
             'birth_date' => ['required', 'date'],

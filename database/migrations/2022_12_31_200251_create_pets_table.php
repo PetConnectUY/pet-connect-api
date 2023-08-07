@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->date('birth_date')->nullable();
-            $table->string('race');
+            $table->string('race')->nullable();
             $table->string('gender');
             $table->text('pet_information');
             $table->foreignId('user_id')

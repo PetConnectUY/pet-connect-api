@@ -25,7 +25,6 @@ class UserController extends Controller
             $user = User::create([
                 'firstname' => $request->validated('firstname'),
                 'lastname' => $request->validated('lastname'),
-                'username' => $request->validated('username'),
                 'email' => $request->validated('email'),
                 'password' => Hash::make($request->validated('password')),
                 'birth_date' => $request->validated('birth_date'),
@@ -98,17 +97,8 @@ class UserController extends Controller
         }
     }
 
-    private function jsonResponse($data)
-    {
-        return [
-            'id' => $data->id,
-            'firstname' => $data->firstname,
-            'lastname' => $data->lastname,
-            'username' => $data->username,
-            'email' => $data->email,
-            'birth_date' => $data->birth_date,
-            'phone' => $data->phone,
-            'address' => $data->address,
-        ];
+    public function checkEmailAvailability($email) {
+        $user = User::where('email', $email)->first();
+        return $this->successResponse(!empty($user));
     }
 }

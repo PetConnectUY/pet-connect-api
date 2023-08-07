@@ -29,11 +29,11 @@ class PetRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'min:3'],
+            'name' => ['required', 'min:3', 'regex:/^[a-zA-ZáÁéÉíÍóÓúÚñÑ\s]+$/u'],
             'birth_date' => ['nullable', 'date'],
-            'race' => ['required'],
+            'race' => ['nullable', 'regex:/^[a-zA-ZáÁéÉíÍóÓúÚñÑ\s]+$/u'],
             'gender' => ['required', Rule::in(['male', 'female'])],
-            'pet_information' => ['required'],
+            'pet_information' => ['required', 'regex:/^[a-zA-ZñÑáÁéÉíÍóÓúÚüÜ\s\d.,!?-]*$/'],
         ];
     }
 
@@ -42,11 +42,13 @@ class PetRequest extends FormRequest
         return [
             'name.required' => 'El nombre de la mascota es requerido.',
             'name.min' => 'El nombre de la mascota debe contener como minimo 3 caracteres.',
+            'name.regex' => 'El nombre de la mascota contiene caracteres no admitidos.',
             'birth_date.date' => 'El formato de la fecha de nacimiento es incorrecto',
-            'race.required' => 'La raza es requerida',
+            'race.regex' => 'La raza de la mascota contiene caracteres no admitidos.',
             'gender.required' => 'El género es requerido.',
             'gender.in' => 'El formato del género es incorrecto.',
             'pet_information.required' => 'La información de la mascota es requerida.',
+            'pet_information.regex' => 'Las características de la mascota contiene caracteres no admitidos.',
         ];
     }
 

@@ -33,6 +33,8 @@ Route::prefix('auth')->group(function () {
 // Users routes
 Route::prefix('users')->group(function () {
     Route::post('', [UserController::class, 'store']);
+    Route::get('/check-username-exists/{username}', [UserController::class, 'checkUsernameAvailability']);
+    Route::get('/check-email-exists/{email}', [UserController::class, 'checkEmailAvailability']);
     
     Route::middleware('jwt.auth')->group(function () {
         Route::post('/{id}', [UserController::class, 'update']);

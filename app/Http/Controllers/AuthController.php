@@ -16,17 +16,17 @@ class AuthController extends Controller
     {
         try
         {
-            $credentials = request(['username', 'password']);
+            $credentials = request(['email', 'password']);
             if(! $token = auth()->attempt($credentials))
             {
-                return $this->errorResponse('Error username or password.', Response::HTTP_UNAUTHORIZED);
+                return $this->errorResponse('Error email or password.', Response::HTTP_UNAUTHORIZED);
             }
             
             return $this->respondWithToken($token);
         }
         catch(Exception $e)
         {
-            return $this->errorResponse('Ocurrió un error al iniciar sesión', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->errorResponse('Ocurrió un error al iniciar sesión. '.$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -51,7 +51,6 @@ class AuthController extends Controller
                 'id' => auth()->user()->id,
                 'firstname' => auth()->user()->firstname,
                 'lastname' => auth()->user()->lastname,
-                'username' => auth()->user()->username,
                 'email' => auth()->user()->email,
                 'birth_date' => auth()->user()->birth_date,
                 'phone' => auth()->user()->phone,
