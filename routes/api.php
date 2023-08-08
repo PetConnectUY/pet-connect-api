@@ -83,13 +83,21 @@ Route::prefix('users-pets-tokens')->middleware(['jwt.auth', 'role.checker:' . im
 });
 
 //Products routes
-Route::prefix('products')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::ADMIN_ROLE])])->group(function() {
+Route::prefix('products')->middleware(['jwt.auth'])->group(function() {
     Route::get('', [ProductController::class, 'index']);
-    Route::post('', [ProductController::class, 'store']);
-    Route::delete('/{id}', [ProductController::class, 'destroy']);
+    Route::middleware('role.checker:' . implode(',', [UserRole::ADMIN_ROLE]))->group(function () {
+        Route::post('', [ProductController::class, 'store']);
+        Route::delete('/{id}', [ProductController::class, 'destroy']);
+    });
 });
 
 // Mercado Pago routes
-Route::prefix('store')->middleware(['jwt.auth'])->group(function() {
-    Route::post('/{productId}', [MercadoPagoController::class, 'createPreference']);
+Route::prefix('store')->group(function() {
+    Route::post('/webhook', [MercadoPagoController::class, 'handleWebhook']);
+    Route::middleware('jwt.auth')->group(function () {
+        Route::post('/{productId}', [MercadoPagoController::class, 'createOrder']);
+        Route::get('/success', [MercadoPagoController::class, 'success'])->name('store.success');
+        Route::get('/error', [MercadoPagoController::class, 'error'])->name('store.error');
+        Route::get('/pending', [MercadoPagoController::class, 'pending'])->name('store.pending');
+    });
 });

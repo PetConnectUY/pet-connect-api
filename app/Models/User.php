@@ -37,6 +37,15 @@ class User extends Authenticatable implements JWTSubject
         'password',
     ];
 
+    protected $visible = [
+        'firstname',
+        'lastname',
+        'email',
+        'birth_date',
+        'phone',
+        'address',
+    ];
+
     public function getJWTIdentifier()
     {
         return $this->getKey();

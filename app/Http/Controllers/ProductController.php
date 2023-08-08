@@ -34,6 +34,7 @@ class ProductController extends Controller
             $product = new Product();
             
             $product->name = $request->validated('name');
+            $product->role_id = $request->validated('role_id');
             $product->price = $request->validated('price');
             $product->description = $request->validated('description');
             if($request->has('image'))

@@ -6,13 +6,15 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "doctrine/lexer": "1.*",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.7",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
-        "mercadopago/dx-php": "dev-poc-mapping",
-        "php-open-source-saver/jwt-auth": "^2.0"
+        "mercadopago/dx-php": "2.5.5",
+        "php-open-source-saver/jwt-auth": "^2.0",
+        "swiftmailer/swiftmailer": "^6.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
