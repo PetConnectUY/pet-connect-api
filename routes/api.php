@@ -2,6 +2,7 @@
 
 use App\Classes\UserRole;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\PetController;
 use App\Http\Controllers\PetImageController;
 use App\Http\Controllers\ProductController;
@@ -60,6 +61,7 @@ Route::prefix('pets-images')->middleware(['jwt.auth', 'role.checker:' . implode(
         Route::post('', 'store');
         Route::post('/{id}', 'update');
         Route::delete('/{id}', 'destroy');
+        Route::get('/{id}', 'getImage');
     });
 });
 
@@ -85,4 +87,9 @@ Route::prefix('products')->middleware(['jwt.auth', 'role.checker:' . implode(','
     Route::get('', [ProductController::class, 'index']);
     Route::post('', [ProductController::class, 'store']);
     Route::delete('/{id}', [ProductController::class, 'destroy']);
+});
+
+// Mercado Pago routes
+Route::prefix('store')->middleware(['jwt.auth'])->group(function() {
+    Route::post('/{productId}', [MercadoPagoController::class, 'createPreference']);
 });

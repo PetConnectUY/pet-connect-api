@@ -68,4 +68,17 @@ class PetImageController extends Controller
 
         return $this->successResponse($image);
     }
+
+    public function getImage($id)
+    {
+        $image = PetImage::find($id);
+        if(!$image)
+        {
+            return $this->errorResponse('No se encontró la imagen.', Response::HTTP_NOT_FOUND);
+        }
+
+        $imageUrl = asset('storage/'.env('PET_IMAGES_FOLDER') . $image->name);
+
+        return $this->successResponse($imageUrl);
+    }
 }

@@ -25,6 +25,11 @@ class Pet extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
+    public function images()
+    {
+        return $this->hasMany(PetImage::class, 'pet_id');
+    }
+
     public function toArray()
     {
         return [
@@ -34,6 +39,7 @@ class Pet extends Model
             'race' => $this->race,
             'gender' => $this->gender,
             'pet_information' => $this->pet_information,
+            'images' => $this->images,
             'user' => [
                 'id' => $this->user->id,
                 'firstname' => $this->user->firstname,

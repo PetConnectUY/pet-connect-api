@@ -15,14 +15,8 @@ class Product extends Model
         'image',
     ];
 
-    public function toArray()
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'price' => $this->price,
-            'description' => $this->description,
-            'image' => $this->image,
-        ];
-    }
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
 }

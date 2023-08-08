@@ -14,9 +14,14 @@ use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
     use ApiResponser, UUID, Image;
+    private $publicPath = 'app/public';
 
     public function index() {
         $products = Product::get();
+
+        $products->each(function($product) {
+            $product->image = asset('storage/products/' . $product->image);
+        });
 
         return $this->successResponse($products);
     }
