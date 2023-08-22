@@ -57,7 +57,7 @@ class MercadoPagoController extends Controller
             $preference->auto_return = "approved";
             $preference->items = array($item);
             $preference->payer = $payer;
-            $preference->notification_url = 'https://86e1-2800-a4-29b8-6800-147c-6fa2-4eaa-b877.ngrok-free.app/store/webhook';
+            $preference->notification_url = $preference->notification_url = 'https://86e1-2800-a4-29b8-6800-147c-6fa2-4eaa-b877.ngrok-free.app/store/webhook?preference_id=' . $preference->id;
             $preference->back_urls = [
                 "success" => route('store.success'),
                 "failure" => route('store.error'),
@@ -138,8 +138,6 @@ class MercadoPagoController extends Controller
                 return $this->errorResponse('Ocurrió un error al actualizar la órden.', Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
-
-        return $this->successResponse('error');
     }
 
     public function pending()

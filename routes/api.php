@@ -7,6 +7,7 @@ use App\Http\Controllers\PetController;
 use App\Http\Controllers\PetImageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\StatisticController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPetTokenController;
 use Illuminate\Support\Facades\Route;
@@ -41,11 +42,12 @@ Route::prefix('users')->group(function () {
     Route::middleware('jwt.auth')->group(function () {
         Route::post('/{id}', [UserController::class, 'update']);
         Route::delete('/{id}', [UserController::class, 'destroy']);
+        Route::get('/statistics', [StatisticController::class, 'userStatistic']);
     });
 });
 
 // Pets routes
-Route::prefix('pets')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::USER_ROLE, UserRole::PREMIUM_ROLE, UserRole::ADMIN_ROLE])])->group(function () {
+Route::prefix('pets')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::USER_ROLE, UserRole::PREMIUM_ROLE, UserRole::PREMIUM_PLUS, UserRole::AFFILIATE, UserRole::ADMIN_ROLE])])->group(function () {
     Route::controller(PetController::class)->group(function () {
         Route::get('', 'index');
         Route::get('/{id}', 'view');
@@ -56,7 +58,7 @@ Route::prefix('pets')->middleware(['jwt.auth', 'role.checker:' . implode(',', [U
 });
 
 // Pet Images routes
-Route::prefix('pets-images')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::USER_ROLE, UserRole::PREMIUM_ROLE, UserRole::ADMIN_ROLE])])->group(function () {
+Route::prefix('pets-images')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::USER_ROLE, UserRole::PREMIUM_ROLE, UserRole::PREMIUM_PLUS, UserRole::AFFILIATE, UserRole::ADMIN_ROLE])])->group(function () {
     Route::controller(PetImageController::class)->group(function () {
         Route::post('', 'store');
         Route::post('/{id}', 'update');

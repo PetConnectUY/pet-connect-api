@@ -61,6 +61,16 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOneThrough(Role::class, UserRole::class, 'user_id', 'id', 'id', 'role_id');
     }
 
+    public function pets()
+    {
+        return $this->hasMany(Pet::class, 'user_id', 'id');
+    }
+
+    public function petTokens()
+    {
+        return $this->hasManyThrough(UserPetToken::class, Pet::class);
+    }
+
     public function toArray()
     {
         return [
