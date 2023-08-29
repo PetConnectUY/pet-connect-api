@@ -29,16 +29,14 @@ class PutRequest extends FormRequest
     public function rules()
     {
         return [
-            'cover_image' => ['required', Rule::in(0, 1), Rule::unique('pets_images', 'cover_image')->where('pet_id', $this->pet_id)]
+            'image' => ['mimes:jpg,png,jpeg,JPG,PNG,JPEG'],
         ];
     }
 
     public function messages()
     {
         return [
-            'cover_image.required' => 'Es necesario indicar la imagen inicial.',
-            'cover_image.in' => 'El formato indicativo de la imagen inicial es incorrecto.',
-            'cover_image.unique' => 'La mascota ya tiene una imagen inicial.',
+            'image.mimes' => 'El formato de imagen es incorrecto, debe ser de tipo jpg, png o jpeg.',
         ];
     }
 

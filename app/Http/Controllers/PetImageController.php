@@ -48,9 +48,26 @@ class PetImageController extends Controller
             return $this->errorResponse('No se encontró la imagen.', Response::HTTP_NOT_FOUND);
         }
 
-        $image->update([
-            'cover_image' => $request->validated('cover_image'),
-        ]);
+        if($request->has('image'))
+        {
+            $imgName = $this->generateUUID(new PetImage, 'name');
+            $imgExtension = $request->file('image')->getClientOriginalExtension();
+            try
+            {
+                $this->createImages($request->file('image'), env('PET_IMAGES_FOLDER'), $imgName, $imgExtension);
+                $oldimgName = $image->name;
+                $this->deleteImages(env('PET_IMAGES_FOLDER'), $oldimgName);
+                $image->name = $imgName.'.'.$imgExtension;
+                $image->cover_image = 1;
+            }
+            catch(Exception $e)
+            {
+                return $this->errorResponse('Ocurrió un error al subir la imagen. Excepción: '. $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            $image->name = $image->name;
+        }
+        $image->save();
 
         return $this->successResponse($image);
     }
