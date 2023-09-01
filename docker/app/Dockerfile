@@ -15,10 +15,14 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
+    unzip \
+    libmagickwand-dev --no-install-recommends
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN printf "\n" | pecl install imagick
+RUN docker-php-ext-enable imagick
 
 # Install PHP extension
 RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg

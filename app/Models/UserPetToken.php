@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\URL;
-use SimpleSoftwareIO\QrCode\Facades\QrCode; // Corregir el namespace
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class UserPetToken extends Model
 {
@@ -47,8 +47,14 @@ class UserPetToken extends Model
 
     public function generateQRCode()
     {
-        $qrCodeUrl = URL::to("/pets/{$this->token}");
-        $qrCode = QrCode::size(250)->generate($qrCodeUrl);
-        $this->qr_code = $qrCode;
+        $qrCodeUrl = env('FRONTEND_URL').'pets/'.$this->token;
+        $image = QrCode::format('png')
+            ->size(256)
+            ->generate($qrCodeUrl);
+
+        Storage::put(env('QR_IMAGES_FOLDER').$this->token.'.png', $image);
+        $fileName = $this->token .'.png';
+        $qrImageUrl = asset('storage'.env('QR_IMAGES_FOLDER').$fileName);
+        $this->qr_code = $qrImageUrl;
     }
 }
