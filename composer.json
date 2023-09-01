@@ -14,6 +14,7 @@
         "laravel/tinker": "^2.7",
         "mercadopago/dx-php": "2.5.5",
         "php-open-source-saver/jwt-auth": "^2.0",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "swiftmailer/swiftmailer": "^6.3"
     },
     "require-dev": {

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('token');
             $table->integer('pet_id');
+            $table->text('qrCode');
             $table->timestamps();
             $table->softDeletes();
         });

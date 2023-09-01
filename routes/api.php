@@ -74,7 +74,7 @@ Route::prefix('roles')->middleware(['jwt.auth', 'role.checker:' . implode(',', [
 });
 
 // Users Pets Tokens routes
-Route::prefix('users-pets-tokens')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::USER_ROLE, UserRole::PREMIUM_ROLE, UserRole::ADMIN_ROLE])])->group(function () {
+Route::prefix('users-pets-tokens')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::USER_ROLE, UserRole::PREMIUM_ROLE, UserRole::PREMIUM_PLUS, UserRole::AFFILIATE, UserRole::ADMIN_ROLE])])->group(function () {
     Route::delete('/{id}', [UserPetTokenController::class, 'destroy']);
     Route::get('/', [UserPetTokenController::class, 'trashed']);
     

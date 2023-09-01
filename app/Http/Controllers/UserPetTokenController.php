@@ -34,7 +34,7 @@ class UserPetTokenController extends Controller
         catch(Exception $e)
         {
             DB::rollBack();
-            return $this->errorResponse('Ocurrió un error crear el token.', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->errorResponse('Ocurrió un error crear el token. '.$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -34,6 +34,7 @@ class PetImage extends Model
     {
         return [
             'id' => $this->id,
+            'pet_id' => $this->pet_id,
             'name' => $this->name,
             'is_cover_image' => $this->cover_image,
             'url' => $this->imageUrl(),
