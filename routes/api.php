@@ -95,7 +95,7 @@ Route::prefix('products')->middleware(['jwt.auth'])->group(function() {
 
 // Mercado Pago routes
 Route::prefix('store')->group(function() {
-    Route::post('/webhook', [MercadoPagoController::class, 'handleWebhook']);
+    Route::post('/webhook', [MercadoPagoController::class, 'handleWebhook'])->name('store.webhook');
     Route::middleware('jwt.auth')->group(function () {
         Route::post('/{productId}', [MercadoPagoController::class, 'createOrder']);
         Route::get('/success', [MercadoPagoController::class, 'success'])->name('store.success');
