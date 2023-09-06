@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Log;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class QrCodeActivation extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+
+    protected $table = 'log_qr_code_activations';
 
     protected $fillable = [
         'qr_code_id',
         'user_id',
-        'pet_id',
-        'activation_url'
+        'actived_at'
     ];
 }

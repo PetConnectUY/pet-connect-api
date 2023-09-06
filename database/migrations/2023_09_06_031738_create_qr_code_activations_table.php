@@ -18,7 +18,6 @@ return new class extends Migration
             $table->unsignedBigInteger('qr_code_id');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('pet_id')->nullable();
-            $table->boolean('is_used')->default(false);
             $table->timestamps();
             $table->softDeletes();
 

@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('qr_codes', function (Blueprint $table) {
+        Schema::create('log_qr_code_activations', function (Blueprint $table) {
             $table->id();
-            $table->text('token');
-            $table->string('image_url')->unique();
-            $table->boolean('is_used')->default(false);
+            $table->unsignedBigInteger('qr_code_id');
+            $table->unsignedBigInteger('user_id');
+            $table->dateTime('actived_at');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('qr_codes');
+        Schema::dropIfExists('log_qr_code_activations');
     }
 };
