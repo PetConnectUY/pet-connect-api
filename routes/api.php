@@ -75,17 +75,6 @@ Route::prefix('roles')->middleware(['jwt.auth', 'role.checker:' . implode(',', [
     Route::delete('/{id}', [RoleController::class, 'destroy']);
 });
 
-// Users Pets Tokens routes
-Route::prefix('users-pets-tokens')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::USER_ROLE, UserRole::PREMIUM_ROLE, UserRole::PREMIUM_PLUS, UserRole::AFFILIATE, UserRole::ADMIN_ROLE])])->group(function () {
-    Route::delete('/{id}', [UserPetTokenController::class, 'destroy']);
-    Route::get('/', [UserPetTokenController::class, 'trashed']);
-    
-    Route::middleware('role.limits')->group(function () {
-        Route::post('', [UserPetTokenController::class, 'generateToken']);
-        Route::post('/{id}/restore', [UserPetTokenController::class, 'restoreTrashed']);
-    });
-});
-
 //Products routes
 Route::prefix('products')->middleware(['jwt.auth'])->group(function() {
     Route::get('', [ProductController::class, 'index']);

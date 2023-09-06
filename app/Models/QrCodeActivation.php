@@ -16,4 +16,9 @@ class QrCodeActivation extends Model
         'pet_id',
         'activation_url'
     ];
+
+    public function pet()
+    {
+        return $this->belongsTo(Pet::class, 'pet_id');
+    }
 }

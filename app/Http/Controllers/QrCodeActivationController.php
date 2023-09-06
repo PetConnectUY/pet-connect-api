@@ -29,7 +29,10 @@ class QrCodeActivationController extends Controller
 
         if($qrCode->is_used == true)
         {
-            return $this->errorResponse('El código qr ya fué activado', Response::HTTP_CONFLICT);
+            $pet = QrCodeActivation::where('qr_code_id', $qrCode->id)
+                ->first();
+
+            return $this->successResponse($pet->pet);
         }
 
         $request->validate([
@@ -47,6 +50,9 @@ class QrCodeActivationController extends Controller
                 'user_id' => auth()->user()->id,
                 'pet_id' => $request->input('pet_id'),
             ]);
+
+            $qrCode->is_used = true;
+            $qrCode->save();
 
             LogQrCodeActivation::create([
                 'qr_code_id' => $qrCode->id,
