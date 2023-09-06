@@ -6,6 +6,7 @@ use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\PetController;
 use App\Http\Controllers\PetImageController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StatisticController;
 use App\Http\Controllers\UserController;
@@ -100,3 +101,11 @@ Route::prefix('store')->group(function() {
         Route::post('/{productId}', [MercadoPagoController::class, 'createOrder']);
     });
 });
+
+Route::prefix('qr-codes')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::ADMIN_ROLE])])
+    ->group(
+        function() {
+            Route::post('', [QrCodeController::class, 'generate']);
+            Route::post('generate-image', [QrCodeController::class, 'generateQrImage']);
+        }
+    );
