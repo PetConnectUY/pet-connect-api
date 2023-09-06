@@ -67,4 +67,14 @@ class QrCodeActivationController extends Controller
             return $this->errorResponse('Ocurrió un error al activar el código qr.'. $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function verifyQrActivation($activationToken)
+    {
+        $qrCode = QrCode::where('token', $activationToken)
+            ->first();
+
+        $isActived = $qrCode->is_used == false ? false : true;
+
+        return $this->successResponse($isActived);
+    }
 }

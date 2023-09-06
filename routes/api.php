@@ -99,5 +99,6 @@ Route::prefix('qr-codes')->middleware(['jwt.auth'])
                         Route::post('', [QrCodeController::class, 'generate']);
                         Route::post('generate-image', [QrCodeController::class, 'generateQrImage']);
                     });
+            Route::get('is-activated/{activationToken}', [QrCodeActivationController::class, 'verifyQrActivation']);
             Route::post('activate/{activationToken}', [QrCodeActivationController::class, 'activate']);
     });
