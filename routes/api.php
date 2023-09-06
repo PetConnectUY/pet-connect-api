@@ -92,13 +92,15 @@ Route::prefix('store')->group(function() {
     });
 });
 
-Route::prefix('qr-codes')->middleware(['jwt.auth'])
-    ->group(function() {
-            Route::middleware('role.checker:' . implode(',', [UserRole::ADMIN_ROLE]))
-                ->group(function() {
-                        Route::post('', [QrCodeController::class, 'generate']);
-                        Route::post('generate-image', [QrCodeController::class, 'generateQrImage']);
-                    });
-            Route::get('activate/{activationToken}', [QrCodeActivationController::class, 'verifyQrActivation']);
+Route::prefix('qr-codes')->group(function() {
+    Route::middleware('role.checker:' . implode(',', [UserRole::ADMIN_ROLE]))
+        ->group(function() {
+            Route::post('', [QrCodeController::class, 'generate']);
+            Route::post('generate-image', [QrCodeController::class, 'generateQrImage']);
+        });
+    Route::middleware('auth')
+        ->group(function() {
             Route::post('activate/{activationToken}', [QrCodeActivationController::class, 'activate']);
-    });
+        });
+    Route::get('verify-activation/{activationToken}', [QrCodeActivationController::class, 'verifyQrActivation']);
+});

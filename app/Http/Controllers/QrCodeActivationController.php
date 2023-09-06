@@ -72,8 +72,13 @@ class QrCodeActivationController extends Controller
     {
         $qrCode = QrCode::where('token', $activationToken)
             ->first();
+        
+        if(is_null($qrCode))
+        {
+            return $this->errorResponse('No se encontró el código qr', Response::HTTP_NOT_FOUND);
+        }
 
-        $isActived = $qrCode->is_used == false ? false : true;
+        $isActived = $qrCode->is_used == 0 ? 0 : 1;
 
         return $this->successResponse($isActived);
     }
