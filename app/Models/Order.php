@@ -2,17 +2,32 @@
 
 namespace App\Models;
 
+use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, UUID;
+
+    protected $keyType = 'string';
+    protected $primaryKey = 'uuid';
+    public $incrementing = false;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($order) {
+            $order->uuid = $order->generateUUID($order, 'uuid');
+        });
+    }
 
     protected $fillable = [
+        'uuid',
         'user_id',
         'product_id',
-        'order_unique_id',
+        'payment_id',
         'status',
     ];
 

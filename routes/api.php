@@ -98,8 +98,5 @@ Route::prefix('store')->group(function() {
     Route::post('/webhook', [MercadoPagoController::class, 'handleWebhook'])->name('store.webhook');
     Route::middleware('jwt.auth')->group(function () {
         Route::post('/{productId}', [MercadoPagoController::class, 'createOrder']);
-        Route::get('/success', [MercadoPagoController::class, 'success'])->name('store.success');
-        Route::get('/error', [MercadoPagoController::class, 'error'])->name('store.error');
-        Route::get('/pending', [MercadoPagoController::class, 'pending'])->name('store.pending');
     });
 });

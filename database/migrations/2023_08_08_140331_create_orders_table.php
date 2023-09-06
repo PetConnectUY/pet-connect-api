@@ -14,11 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id();
-            $table->string('order_unique_id');
+            $table->string('uuid')->primary();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('product_id');
-            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
+            $table->string('payment_id')->nullable();
+            $table->enum('status', ['pending', 'completed', 'failed', 'processing', 'packing', 'sending'])->default('pending');
             $table->timestamps();
         });
     }
