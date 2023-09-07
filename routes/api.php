@@ -98,9 +98,10 @@ Route::prefix('qr-codes')->group(function() {
             Route::post('', [QrCodeController::class, 'generate']);
             Route::post('generate-image', [QrCodeController::class, 'generateQrImage']);
         });
-    Route::middleware('auth')
+    Route::middleware('jwt.auth')
         ->group(function() {
             Route::post('activate/{activationToken}', [QrCodeActivationController::class, 'activate']);
+            Route::post('activate/set-user/{activationToken}', [QrCodeActivationController::class, 'activateQrWithUser']);
         });
     Route::get('verify-activation/{activationToken}', [QrCodeActivationController::class, 'verifyQrActivation']);
 });

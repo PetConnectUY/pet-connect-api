@@ -19,7 +19,7 @@ class StatisticController extends Controller
         }
         $stats = [
             'total_pets' => $user->pets()->count(),
-            'total_tokens' => $user->petTokens()->count(),
+            'total_tokens' => $user->qrCodes()->count(),
         ];
 
         return $this->successResponse($stats);

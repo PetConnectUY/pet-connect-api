@@ -66,9 +66,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Pet::class, 'user_id', 'id');
     }
 
-    public function petTokens()
+    public function qrCodes()
     {
-        return $this->hasManyThrough(UserPetToken::class, Pet::class);
+        return $this->hasMany(QrCodeActivation::class, 'user_id');
     }
 
     public function toArray()
