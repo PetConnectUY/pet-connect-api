@@ -30,6 +30,11 @@ class Pet extends Model
         return $this->hasMany(PetImage::class, 'pet_id');
     }
 
+    public function settings()
+    {
+        return $this->hasOne(PetSettings::class, 'pet_id');
+    }
+
     public function toArray()
     {
         return [
@@ -42,13 +47,12 @@ class Pet extends Model
             'images' => $this->images,
             'user' => [
                 'id' => $this->user->id,
-                'firstname' => $this->user->firstname,
-                'lastname' => $this->user->lastname,
-                'username' => $this->user->username,
-                'email' => $this->user->email,
+                'firstname' => $this->settings->user_fullname_visible == 1 ? $this->user->firstname : null,
+                'lastname' => $this->settings->user_fullname_visible == 1 ? $this->user->lastname : null,
+                'email' => $this->settings->user_email_visible == 1 ? $this->user->email : null,
                 'birth_date' => $this->user->birth_date,
-                'phone' => $this->user->phone,
-                'address' => $this->user->address,
+                'phone' => $this->settings->user_phone_visible == 1 ? $this->user->phone : null,
+                'address' => $this->settings->user_location_visible == 1 ? $this->user->address : null,
                 'role' => [
                     'id' => $this->user->role->id,
                     'name' => $this->user->role->name,

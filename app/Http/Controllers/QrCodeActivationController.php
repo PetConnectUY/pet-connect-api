@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PetSettings;
 use App\Models\QrCode;
 use App\Models\QrCodeActivation;
 use App\Traits\ApiResponser;
@@ -81,7 +82,6 @@ class QrCodeActivationController extends Controller
 
     public function activateQrWithUser(Request $request, $activationToken)
     {
-        // Validación inicial para verificar si el código QR existe
         $qrCode = QrCode::where('token', $activationToken)->first();
         
         if (is_null($qrCode)) {
@@ -93,17 +93,14 @@ class QrCodeActivationController extends Controller
 
             $existingActivation = QrCodeActivation::where('qr_code_id', $qrCode->id)->first();
 
-            // Validación si el código QR ya está activado por el usuario actual
             if ($existingActivation && $existingActivation->user_id == auth()->user()->id) {
                 return $this->successResponse(['message' => 'Código QR ya existe y está activado por el usuario']);
             }
 
-            // Validación si el código QR está en uso por otro usuario y tiene un perfil de mascota
             if ($existingActivation && $existingActivation->user_id != auth()->user()->id && !is_null($existingActivation->pet_id)) {
                 return $this->successResponse(['message' => 'El código QR ya está en uso por otro usuario.']);
             }
 
-            // Si no se encontraron activaciones existentes, se procede a la creación
             QrCodeActivation::create([
                 'qr_code_id' => $qrCode->id,
                 'user_id' => auth()->user()->id,

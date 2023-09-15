@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PetRequest;
 use App\Models\Pet;
+use App\Models\PetSettings;
 use App\Traits\ApiResponser;
 use Exception;
 use Illuminate\Http\Response;
@@ -54,6 +55,10 @@ class PetController extends Controller
                 'pet_information' => $request->validated('pet_information'),
                 'user_id' => auth()->user()->id,
             ]);
+
+            PetSettings::create([
+                'pet_id' => $pet->id
+            ]);
     
             DB::commit();
 
@@ -61,7 +66,7 @@ class PetController extends Controller
         }
         catch(Exception $e)
         {
-            return $this->errorResponse('Ocurrió un error al crear la mascota', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->errorResponse('Ocurrió un error al crear la mascota. '.$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

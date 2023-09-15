@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\PetController;
 use App\Http\Controllers\PetImageController;
+use App\Http\Controllers\PetSettingController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\QrCodeActivationController;
 use App\Http\Controllers\QrCodeController;
@@ -104,4 +105,8 @@ Route::prefix('qr-codes')->group(function() {
             Route::post('activate/set-user/{activationToken}', [QrCodeActivationController::class, 'activateQrWithUser']);
         });
     Route::get('verify-activation/{activationToken}', [QrCodeActivationController::class, 'verifyQrActivation']);
+});
+
+Route::prefix('pets-settings')->middleware(['jwt.auth'])->group(function() {
+    Route::post('/{petId}', [PetSettingController::class, 'changeSettings']);
 });
