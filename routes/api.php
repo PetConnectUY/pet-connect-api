@@ -29,10 +29,12 @@ use Illuminate\Support\Facades\Route;
 // Auth routes
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
+    Route::middleware('jwt.refresh')->group(function () {
+        Route::post('refresh', [AuthController::class, 'refresh']);
+    });
     
     Route::middleware('jwt.auth')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
-        Route::post('refresh', [AuthController::class, 'refresh']);
     });
 });
 

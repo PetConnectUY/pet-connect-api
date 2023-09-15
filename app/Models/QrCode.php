@@ -13,4 +13,9 @@ class QrCode extends Model
         'token',
         'image_url',
     ];
+
+    public function activation()
+    {
+        return $this->hasOne(QrCodeActivation::class, 'qr_code_id');
+    }
 }

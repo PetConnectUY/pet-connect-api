@@ -67,18 +67,31 @@ class QrCodeActivationController extends Controller
 
     public function verifyQrActivation($activationToken)
     {
-        $qrCode = QrCode::where('token', $activationToken)
-            ->first();
-        
-        if(is_null($qrCode))
-        {
-            return $this->errorResponse('No se encontró el código qr', Response::HTTP_NOT_FOUND);
+        $qrCode = QrCode::where('token', $activationToken)->first();
+
+        if (is_null($qrCode)) {
+            return $this->successResponse(['message' => 'No se encontró el código qr']);
         }
 
-        $isActived = $qrCode->is_used == 0 ? 0 : 1;
+        if (!$qrCode->is_used) {
+            return $this->successResponse(['message' => 'Código qr no activado']);
+        }
 
-        return $this->successResponse($isActived);
+        if (!is_null($qrCode->activation->user_id)) {
+            // El código QR está activado y asignado a un usuario
+            if (auth()->user() && $qrCode->activation->user_id == auth()->user()->id) {
+                // El usuario está autenticado y el user_id coincide
+                return $this->successResponse(['message' => 'El código QR ha sido activado y asignado a este usuario']);
+            } else {
+                // El usuario no está autenticado o el user_id no coincide
+                return $this->errorResponse('Unauthorized', Response::HTTP_UNAUTHORIZED);
+            }
+        }
+
+        return $this->successResponse(['message' => 'Código qr activado pero mascota no asignada']);
     }
+
+
 
     public function activateQrWithUser(Request $request, $activationToken)
     {
@@ -98,7 +111,7 @@ class QrCodeActivationController extends Controller
             }
 
             if ($existingActivation && $existingActivation->user_id != auth()->user()->id && !is_null($existingActivation->pet_id)) {
-                return $this->successResponse(['message' => 'El código QR ya está en uso por otro usuario.']);
+                return $this->successResponse(['message' => 'El código QR ya está en uso por otro usuario']);
             }
 
             QrCodeActivation::create([
