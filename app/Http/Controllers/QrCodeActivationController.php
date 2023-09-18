@@ -65,6 +65,36 @@ class QrCodeActivationController extends Controller
         }
     }
 
+    public function verifyActivation($token)
+    {
+        $qrCode = QrCode::where('token', $token)->first();
+
+        if (is_null($qrCode)) {
+            return $this->successResponse(['message' => 'No se encontró el código qr']);
+        }
+
+        if (!$qrCode->is_used) {
+            return $this->successResponse(['message' => 'Código qr no activado']);
+        } else {
+            if(!is_null($qrCode->activation->user_id))
+            {
+                if(!is_null($qrCode->activation->pet_id))
+                {
+                    return $this->successResponse(['message' => 'Código qr activado']);
+                }
+            } else if(auth()->user())
+            {
+                if(!is_null($qrCode->activation->user_id) && $qrCode->activation->user_id == auth()->user()->id)
+                {
+                    return $this->successResponse(['message' => 'El código QR ha sido activado y asignado a este usuario']);
+                } else {
+                    return $this->successResponse(['message' => 'El código QR pertenece a otro usuario']);
+                }
+            }
+            
+        }
+    }
+
     public function verifyQrActivation($activationToken)
     {
         $qrCode = QrCode::where('token', $activationToken)->first();
