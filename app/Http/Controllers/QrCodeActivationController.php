@@ -67,32 +67,7 @@ class QrCodeActivationController extends Controller
 
     public function verifyActivation($token)
     {
-        $qrCode = QrCode::where('token', $token)->first();
-
-        if (is_null($qrCode)) {
-            return $this->successResponse(['message' => 'No se encontró el código qr']);
-        }
-
-        if (!$qrCode->is_used) {
-            return $this->successResponse(['message' => 'Código qr no activado']);
-        } else {
-            if(!is_null($qrCode->activation->user_id))
-            {
-                if(!is_null($qrCode->activation->pet_id))
-                {
-                    return $this->successResponse(['message' => 'Código qr activado']);
-                }
-            } else if(auth()->user())
-            {
-                if(!is_null($qrCode->activation->user_id) && $qrCode->activation->user_id == auth()->user()->id)
-                {
-                    return $this->successResponse(['message' => 'El código QR ha sido activado y asignado a este usuario']);
-                } else {
-                    return $this->successResponse(['message' => 'El código QR pertenece a otro usuario']);
-                }
-            }
-            
-        }
+        
     }
 
     public function verifyQrActivation($activationToken)
@@ -103,22 +78,32 @@ class QrCodeActivationController extends Controller
             return $this->successResponse(['message' => 'No se encontró el código qr']);
         }
 
-        if (!$qrCode->is_used) {
+        if (!$qrCode->is_used) 
+        {
             return $this->successResponse(['message' => 'Código qr no activado']);
-        }
-
-        if (!is_null($qrCode->activation->user_id)) {
-            // El código QR está activado y asignado a un usuario
-            if (auth()->user() && $qrCode->activation->user_id == auth()->user()->id) {
-                // El usuario está autenticado y el user_id coincide
-                return $this->successResponse(['message' => 'El código QR ha sido activado y asignado a este usuario']);
+        } 
+        else 
+        {
+            if(!is_null($qrCode->activation->user_id))
+            {
+                if(!is_null($qrCode->activation->pet_id))
+                {
+                    return $this->successResponse(['message' => 'Código qr activado']);
+                } else {
+                    
+                    if(auth()->user() && $qrCode->activation->user_id == auth()->user()->id)
+                    {
+                        return $this->successResponse(['message' => 'Debe asignar mascota']);
+                    } else if(auth()->user() && $qrCode->activation->user_id != auth()->user()->id) {
+                        return $this->successResponse(['message' => 'Este qr no pertenece al usuario y no tiene una mascota asignada']);
+                    } else {
+                        return $this->errorResponse('Unauthenticated', Response::HTTP_UNAUTHORIZED);
+                    }
+                }
             } else {
-                // El usuario no está autenticado o el user_id no coincide
-                return $this->errorResponse('Unauthorized', Response::HTTP_UNAUTHORIZED);
+                return $this->successResponse(['message' => 'Código qr en uso pero no activado']);
             }
         }
-
-        return $this->successResponse(['message' => 'Código qr activado pero mascota no asignada']);
     }
 
 
