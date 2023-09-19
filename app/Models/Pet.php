@@ -32,7 +32,7 @@ class Pet extends Model
 
     public function settings()
     {
-        return $this->hasOne(PetSettings::class, 'pet_id');
+        return $this->hasOne(UserPetProfileSetting::class, 'user_id', 'user_id');
     }
 
     public function toArray()

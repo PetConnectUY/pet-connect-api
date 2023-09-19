@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\User\PutRequest;
 use App\Http\Requests\User\StoreRequest;
 use App\Models\User;
+use App\Models\UserPetProfileSetting;
 use App\Models\UserRole;
 use App\Traits\ApiResponser;
 use Exception;
@@ -35,6 +36,10 @@ class UserController extends Controller
             UserRole::create([
                 'user_id' => $user->id,
                 'role_id' => UserRole::USER_ROLE_ID,
+            ]);
+
+            UserPetProfileSetting::create([
+                'user_id' => $user->id,
             ]);
 
             DB::commit();

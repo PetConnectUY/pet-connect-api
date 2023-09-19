@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PetRequest;
 use App\Models\Pet;
-use App\Models\PetSettings;
 use App\Traits\ApiResponser;
 use Exception;
 use Illuminate\Http\Response;
@@ -54,10 +53,6 @@ class PetController extends Controller
                 'gender' => $request->validated('gender'),
                 'pet_information' => $request->validated('pet_information'),
                 'user_id' => auth()->user()->id,
-            ]);
-
-            PetSettings::create([
-                'pet_id' => $pet->id
             ]);
     
             DB::commit();

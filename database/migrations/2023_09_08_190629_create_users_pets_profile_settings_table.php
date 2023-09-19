@@ -13,15 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('pets_settings', function (Blueprint $table) {
+        Schema::create('users_pet_profile_settings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('pet_id');
+            $table->unsignedBigInteger('user_id');
             $table->boolean('user_fullname_visible')->default(true);
             $table->boolean('user_location_visible')->default(true);
             $table->boolean('user_phone_visible')->default(true);
             $table->boolean('user_email_visible')->default(true);
 
-            $table->foreign('pet_id')->references('id')->on('pets');
+            $table->foreign('user_id')->references('id')->on('users');
 
             $table->timestamps();
         });
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pets_settings');
+        Schema::dropIfExists('users_pet_profile_settings');
     }
 };

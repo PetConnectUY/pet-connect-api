@@ -3,23 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PetSettingRequest;
-use App\Models\PetSettings;
+use App\Models\UserPetProfileSetting;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
 
-class PetSettingController extends Controller
+class UserPetProfileSettingController extends Controller
 {
     use ApiResponser;
 
-    public function changeSettings($petId, PetSettingRequest $request)
+    public function changeSettings(PetSettingRequest $request)
     {
-        $setting = PetSettings::where('pet_id', $petId)
-            ->with('qractivation')
-            ->first();
+        $setting = UserPetProfileSetting::where('user_id', auth()->user()->id)->first();
 
         if(is_null($setting))
         {
-            return $this->errorResponse('No se encontró la configuración de la mascota.', Response::HTTP_NOT_FOUND);
+            return $this->errorResponse('No se encontró la configuración del perfil de la mascota.', Response::HTTP_NOT_FOUND);
         }
 
         $setting->user_fullname_visible = $request->validated('user_fullname_visible');
