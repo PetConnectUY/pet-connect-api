@@ -23,7 +23,7 @@ class QrCodeController extends Controller
 
             $token = $this->generateUUID(new QrCode(), 'token');
 
-            $qrCodeUrl = 'https://15d5-2800-a4-2876-dd00-d05d-8f26-e9c8-9770.ngrok-free.app/pets/'.$token;
+            $qrCodeUrl = 'http://localhost:4200/pets/'.$token;
             $image = QrCodeLibrary::format('png')
                 ->size(256)
                 ->generate($qrCodeUrl);

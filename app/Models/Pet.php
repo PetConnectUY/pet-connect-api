@@ -35,6 +35,11 @@ class Pet extends Model
         return $this->hasOne(UserPetProfileSetting::class, 'user_id', 'user_id');
     }
 
+    public function activation()
+    {
+        return $this->hasOne(QrCodeActivation::class, 'pet_id');
+    }
+
     public function toArray()
     {
         return [
@@ -46,18 +51,15 @@ class Pet extends Model
             'pet_information' => $this->pet_information,
             'images' => $this->images,
             'user' => [
-                'id' => $this->user->id,
                 'firstname' => $this->settings->user_fullname_visible == 1 ? $this->user->firstname : null,
                 'lastname' => $this->settings->user_fullname_visible == 1 ? $this->user->lastname : null,
                 'email' => $this->settings->user_email_visible == 1 ? $this->user->email : null,
-                'birth_date' => $this->user->birth_date,
                 'phone' => $this->settings->user_phone_visible == 1 ? $this->user->phone : null,
                 'address' => $this->settings->user_location_visible == 1 ? $this->user->address : null,
-                'role' => [
-                    'id' => $this->user->role->id,
-                    'name' => $this->user->role->name,
-                    'description' => $this->user->role->description
-                ]
+            ],
+            'pet_token' => [
+                'id' => $this->activation->id,
+                'token' => $this->activation->qrCode->token,
             ]
         ];
     }
