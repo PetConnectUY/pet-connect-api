@@ -15,6 +15,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPetProfileSettingController;
 use Illuminate\Support\Facades\Route;
 use Anhskohbo\NoCaptcha\NoCaptcha;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -117,4 +118,15 @@ Route::prefix('user-pet-profile-settings')->middleware(['jwt.auth'])->group(func
 Route::prefix('pet-profiles')->group(function() {
     Route::get('/{token}', [PetProfileController::class, 'view']);
     Route::post('/{token}/pet-found', [PetProfileController::class, 'petFound'])->middleware('recaptcha');
+});
+
+
+//Dashboard routes
+Route::prefix('my-pets')->middleware(['jwt.auth'])->group(function() {
+    Route::get('', [DashboardController::class, 'getPets']);
+});
+
+//Dashboard routes
+Route::prefix('my-codes')->middleware(['jwt.auth'])->group(function() {
+    Route::get('', [DashboardController::class, 'getQrCodes']);
 });

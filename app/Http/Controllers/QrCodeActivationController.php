@@ -65,11 +65,6 @@ class QrCodeActivationController extends Controller
         }
     }
 
-    public function verifyActivation($token)
-    {
-        
-    }
-
     public function verifyQrActivation($activationToken)
     {
         $qrCode = QrCode::where('token', $activationToken)->first();
