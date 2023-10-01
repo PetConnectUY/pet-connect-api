@@ -58,8 +58,8 @@ class Pet extends Model
                 'address' => $this->settings->user_location_visible == 1 ? $this->user->address : null,
             ],
             'pet_token' => [
-                'id' => $this->activation->id,
-                'token' => $this->activation->qrCode->token,
+                'id' => $this->activation && $this->activation->id != null ? $this->activation->id : null,
+                'token' => $this->activation && $this->activation->qrCode->token != null ? $this->activation->qrCode->token : null
             ]
         ];
     }
