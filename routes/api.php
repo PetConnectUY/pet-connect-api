@@ -121,12 +121,7 @@ Route::prefix('pet-profiles')->group(function() {
 });
 
 
-//Dashboard routes
-Route::prefix('my-pets')->middleware(['jwt.auth'])->group(function() {
-    Route::get('', [DashboardController::class, 'getPets']);
-});
-
-//Dashboard routes
-Route::prefix('my-codes')->middleware(['jwt.auth'])->group(function() {
-    Route::get('', [DashboardController::class, 'getQrCodes']);
+Route::prefix('dashboard')->middleware((['jwt.auth']))->group(function() {
+    Route::get('/my-pets', [DashboardController::class, 'getPets']);
+    Route::get('/my-codes', [DashboardController::class, 'getQrCodes']);
 });
