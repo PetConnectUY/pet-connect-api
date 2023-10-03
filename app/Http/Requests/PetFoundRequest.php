@@ -2,12 +2,14 @@
 
 namespace App\Http\Requests;
 
+use App\Traits\ApiResponser;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
 class PetFoundRequest extends FormRequest
 {
+    use ApiResponser;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -27,11 +29,9 @@ class PetFoundRequest extends FormRequest
     {
         return [
             'g-recaptcha-response' => ['required'],
-            'firstname' => ['required', 'min:3', 'max:16'],
-            'lastname' => ['required', 'min:3', 'max:16'],
-            'email' => ['required', 'email'],
-            'phone' => ['nullable'],
-            'location' => ['nullable']
+            'firstname' => ['nullable', 'min:3', 'max:16'],
+            'email' => ['nullable', 'email'],
+            'phone' => ['required'],
         ];
     }
 

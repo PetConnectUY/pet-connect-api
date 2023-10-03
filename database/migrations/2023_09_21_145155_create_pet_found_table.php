@@ -17,11 +17,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('pet_id');
             $table->foreign('pet_id')->references('id')->on('pets');
-            $table->string('firstname');
-            $table->string('lastname');
-            $table->string('email');
-            $table->string('phone')->nullable();
-            $table->string('location')->nullable();
+            $table->string('firstname')->nullable();
+            $table->string('phone');
+            $table->string('email')->nullable();
             $table->timestamps();
         });
     }

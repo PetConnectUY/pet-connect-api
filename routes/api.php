@@ -117,7 +117,7 @@ Route::prefix('user-pet-profile-settings')->middleware(['jwt.auth'])->group(func
 
 Route::prefix('pet-profiles')->group(function() {
     Route::get('/{token}', [PetProfileController::class, 'view']);
-    Route::post('/{token}/pet-found', [PetProfileController::class, 'petFound'])->middleware('recaptcha');
+    Route::post('/{token}/pet-found', [PetProfileController::class, 'petFound']);
 });
 
 

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PetFound extends Model
 {
     use HasFactory;
+    protected $table = 'pets_found';
     protected $fillable = [
         'pet_id',
         'firstname',

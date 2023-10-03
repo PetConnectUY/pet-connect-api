@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use Anhskohbo\NoCaptcha\NoCaptcha;
 use App\Http\Requests\PetFoundRequest;
+use App\Jobs\SendPetFoundJob;
 use App\Models\Pet;
+use App\Models\PetFound;
 use App\Models\QrCode;
 use App\Models\QrCodeActivation;
 use App\Traits\ApiResponser;
-use Illuminate\Http\Request;
+use Exception;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class PetProfileController extends Controller
 {
@@ -35,25 +38,45 @@ class PetProfileController extends Controller
         return $this->successResponse($qrCode->activation->pet);
     }
 
-    public function petFound(PetFoundRequest $request, $petId)
+    public function petFound(PetFoundRequest $request, $token)
     {
         $response = $request->input('g-recaptcha-response');
         $captcha = new NoCaptcha(config('services.recaptcha.secret'), config('services.recaptcha.sitekey'));
         $isHuman = $captcha->verifyResponse($response);
         if ($isHuman) {
-            $petQrActivation = QrCodeActivation::where('pet_id', $petId)
-            ->first();
+            $petQrActivation = QrCodeActivation::whereHas('qrCode', function($query) use ($token){
+                $query->where('token', $token);
+            })->first();
         
             if(is_null($petQrActivation))
             {
                 return $this->errorResponse('No se encontró la mascota.', Response::HTTP_NOT_FOUND);
             }
+            try 
+            {
+                DB::beginTransaction();
 
-            return $this->successResponse('captcha completo');
+                $petFound = PetFound::create([
+                    'phone' => $request->validated('phone'),
+                    'firstname' => $request->validated('firstname'),
+                    'email' => $request->validated('email'),
+                    'pet_id' => $petQrActivation->pet_id
+                ]);
+
+                SendPetFoundJob::dispatch($petQrActivation, $petFound);
+
+                DB::commit();
+
+                return $this->successResponse(['message' => 'Solocitud envíada con éxito']);
+            }
+            catch(Exception $e)
+            {
+                DB::rollBack();
+                return $this->errorResponse('Ocurrió un error al enviar la solicitud.'. $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+            
         } else {
             return $this->errorResponse('No se pudo completar la acción porque no se verificó el captcha', Response::HTTP_BAD_REQUEST);
         }
-        
-
     }
 }
