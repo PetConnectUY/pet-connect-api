@@ -5,7 +5,6 @@ namespace App\Mail;
 use App\Models\PetFound;
 use App\Models\QrCodeActivation;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -27,6 +26,7 @@ class PetFoundNotification extends Mailable
     {
         $this->activation = $activation;
         $this->petFound = $petFound;
+        $this->subject("Encontraron a ". $this->activation->pet->name);
     }
 
     /**

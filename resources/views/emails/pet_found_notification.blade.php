@@ -3,24 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tu pedido de [nombre del producto] ha sido confirmado</title>
 
     <!-- Estilos CSS -->
     <style>
         body {
             background-color: #ffffff;
+            font-size: 1.6em;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            border: 1px solid #ccc;
+        a {
+            color: #fff;
         }
 
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border: 1px solid #ccc;
+        span {
+            font-weight: bold;
         }
 
         img {
@@ -45,7 +41,7 @@
 
         .footer {
             background-color: #f5f5f5;
-            color: #000000;
+            color: #fff;
             padding: 20px;
             text-align: center;
         }
@@ -57,11 +53,20 @@
             padding: 10px;
             border-radius: 5px;
             text-decoration: none;
+            transition: .5s color;
         }
 
         .btn:hover {
             color: #fff;
             background-color: #f8a629;
+        }
+
+        .subtitle {
+            font-size: 1.4em;
+        }
+
+        .text {
+            font-size: 1.2em;
         }
     </style>
 </head>
@@ -72,14 +77,19 @@
             <h1>Alguien quiere ponerse en contacto contigo</h1>
         </div>
         <div class="content">
-            <p>¡Hola {{$activation->user->firstname}},</p>
-            <p>Te notificamos que alguien escaneó la chapita de {{$activation->pet->name}}</p>
-            <p>El número que se nos proporcionó es <b>{{$pet_found->phone}}</b></p>
+            <p class="subtitle">¡Hola {{$activation->user->firstname}}!</p>
+            <p class="subtitle">Te notificamos que alguien escaneó la chapita de {{$activation->pet->name}}</p>
+            <p class="text">El número de teléfono que proporcionó @if ($pet_found->firstname) <span>{{$pet_found->firstname}}</span>@endif es <span>{{$pet_found->phone}}</span></p>
+            @if ($pet_found->email)
+                <p class="text">Además se proporcionó un email de contacto para que puedas comunicarte en caso de que el número de teléfono falle <span>{{$pet_found->email}}</span></p>
+            @endif
 
-            <p>¡Esperamos que puedas encontrar a {{$activation->pet->name}}!</p>
+            <p class="text">¡Esperamos que puedas encontrar a {{$activation->pet->name}}!</p>
         </div>
         <div class="footer">
-            <p><a href="https://www.petconnect.com/" class="btn">Visita nuestra web</a></p>
+            <p>
+                <a href="#" class="btn">Visita nuestra web</a>
+            </p>
         </div>
     </div>
 </body>
