@@ -19,7 +19,7 @@ class DashboardController extends Controller
     {
         $pets = Pet::where('deleted_at', null)
             ->where('user_id', auth()->user()->id)
-            ->paginate(10);
+            ->paginate(12);
         
         return $this->successResponse($pets);
     }
@@ -43,7 +43,7 @@ class DashboardController extends Controller
                 
         }
 
-        return $this->successResponse($codes->with('pet')->paginate(10));
+        return $this->successResponse($codes->with('pet')->paginate(12));
     }
 
     //debe migrarse a dashboard/userontroller.php
