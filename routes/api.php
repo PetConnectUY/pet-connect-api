@@ -111,10 +111,6 @@ Route::prefix('qr-codes')->group(function() {
     Route::get('verify-activation/{activationToken}', [QrCodeActivationController::class, 'verifyQrActivation']);
 });
 
-Route::prefix('user-pet-profile-settings')->middleware(['jwt.auth'])->group(function() {
-    Route::post('/', [UserPetProfileSettingController::class, 'changeSettings']);
-});
-
 Route::prefix('pet-profiles')->group(function() {
     Route::get('/{token}', [PetProfileController::class, 'view']);
     Route::post('/{token}/pet-found', [PetProfileController::class, 'petFound'])->middleware('throttle:1,3');
@@ -124,4 +120,5 @@ Route::prefix('pet-profiles')->group(function() {
 Route::prefix('dashboard')->middleware((['jwt.auth']))->group(function() {
     Route::get('/my-pets', [DashboardController::class, 'getPets']);
     Route::get('/my-codes', [DashboardController::class, 'getQrCodes']);
+    Route::post('/change-settings', [DashboardController::class, 'changeSettings']);
 });
