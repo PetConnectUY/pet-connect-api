@@ -31,7 +31,6 @@ class UserPetProfileSetting extends Model
             'user_location_visible' =>  $this->user_location_visible,
             'user_phone_visible' =>  $this->user_phone_visible,
             'user_email_visible' =>  $this->user_email_visible,
-            'user' => $this->user,
         ];
     }
 }

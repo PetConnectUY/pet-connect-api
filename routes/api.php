@@ -12,9 +12,7 @@ use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StatisticController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\UserPetProfileSettingController;
 use Illuminate\Support\Facades\Route;
-use Anhskohbo\NoCaptcha\NoCaptcha;
 use App\Http\Controllers\DashboardController;
 
 /*
@@ -121,4 +119,5 @@ Route::prefix('dashboard')->middleware((['jwt.auth']))->group(function() {
     Route::get('/my-pets', [DashboardController::class, 'getPets']);
     Route::get('/my-codes', [DashboardController::class, 'getQrCodes']);
     Route::post('/change-settings', [DashboardController::class, 'changeSettings']);
+    Route::get('/get-settings', [DashboardController::class, 'getSettings']);
 });

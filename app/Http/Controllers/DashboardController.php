@@ -64,6 +64,19 @@ class DashboardController extends Controller
 
         return $this->successResponse($setting);
     }
+
+    public function getSettings()
+    {
+        $setting = UserPetProfileSetting::where('user_id', auth()->user()->id)
+            ->first();
+
+        if(is_null($setting))
+        {
+            return $this->errorResponse('No se encontró la configuración del usuario.', Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->successResponse($setting);
+    }
 }
 
 
