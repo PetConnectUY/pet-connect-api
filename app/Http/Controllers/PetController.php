@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\PetRequest;
 use App\Models\Pet;
 use App\Traits\ApiResponser;
@@ -130,4 +131,5 @@ class PetController extends Controller
             return $this->errorResponse('Ocurrió un error al eliminar la mascota', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
 }
