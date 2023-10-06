@@ -15,13 +15,24 @@ class DashboardController extends Controller
 {
     use ApiResponser;
 
+    CONST PETS_PER_PAGE = 12;
+
     public function getPets(Request $request)
     {
         $pets = Pet::where('deleted_at', null)
-            ->where('user_id', auth()->user()->id)
-            ->paginate(12);
+            ->where('user_id', auth()->user()->id);
+
+        if($request->input('name'))
+        {
+            $pets->where('name', 'LIKE', '%'.$request->input('name').'%');
+        }
+
+        if($request->input('birth_date'))
+        {
+            $pets->where('birth_date', $request->input('birth_date'));
+        }
         
-        return $this->successResponse($pets);
+        return $this->successResponse($pets->paginate(self::PETS_PER_PAGE));
     }
 
     public function getQrCodes(Request $request)
@@ -65,6 +76,7 @@ class DashboardController extends Controller
         return $this->successResponse($setting);
     }
 
+    //debe migrarse a dashboard/userontroller.php
     public function getSettings()
     {
         $setting = UserPetProfileSetting::where('user_id', auth()->user()->id)
