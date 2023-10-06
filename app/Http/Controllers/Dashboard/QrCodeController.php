@@ -2,15 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\QrCode;
 use App\Traits\ApiResponser;
 use App\Traits\UUID;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use SimpleSoftwareIO\QrCode\Facades\QrCode as QrCodeLibrary;
 use App\Models\QrCodeActivation;
 
 

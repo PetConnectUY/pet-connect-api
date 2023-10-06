@@ -1,14 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\PetRequest;
 use App\Models\Pet;
 use App\Traits\ApiResponser;
-use Exception;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 
 class PetController extends Controller
 {

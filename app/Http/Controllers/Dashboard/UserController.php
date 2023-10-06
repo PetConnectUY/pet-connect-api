@@ -1,18 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Requests\User\PutRequest;
-use App\Http\Requests\User\StoreRequest;
-use App\Models\User;
+use App\Http\Controllers\Controller;
 use App\Models\UserPetProfileSetting;
 use App\Http\Requests\PetSettingRequest;
-use App\Models\UserRole;
 use App\Traits\ApiResponser;
-use Exception;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {

@@ -13,7 +13,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StatisticController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Dashboard\PetController as DashboardPetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -116,7 +116,7 @@ Route::prefix('pet-profiles')->group(function() {
 
 
 Route::prefix('dashboard')->middleware((['jwt.auth']))->group(function() {
-    Route::get('/my-pets', [DashboardController::class, 'getPets']);
+    Route::get('/my-pets', [DashboardPetController::class, 'getPets']);
     Route::get('/my-codes', [DashboardController::class, 'getQrCodes']);
     Route::post('/change-settings', [DashboardController::class, 'changeSettings']);
     Route::get('/get-settings', [DashboardController::class, 'getSettings']);
