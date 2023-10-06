@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
 use App\Traits\ApiResponser;
+use App\Http\Controllers\Controller;
 use App\Traits\UUID;
 use Illuminate\Http\Request;
 use App\Models\QrCodeActivation;

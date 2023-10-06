@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\PetRequest;
 use App\Models\Pet;
 use App\Traits\ApiResponser;

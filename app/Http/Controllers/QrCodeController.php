@@ -11,7 +11,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode as QrCodeLibrary;
-use App\Models\QrCodeActivation;
 
 
 class QrCodeController extends Controller

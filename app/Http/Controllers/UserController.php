@@ -6,7 +6,6 @@ use App\Http\Requests\User\PutRequest;
 use App\Http\Requests\User\StoreRequest;
 use App\Models\User;
 use App\Models\UserPetProfileSetting;
-use App\Http\Requests\PetSettingRequest;
 use App\Models\UserRole;
 use App\Traits\ApiResponser;
 use Exception;
