@@ -15,7 +15,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\PetController as DashboardPetController;
 use App\Http\Controllers\Dashboard\UserController as DashboardUserController;
-use App\Http\Controllers\Dashboard\QrCodeControllerController as DashboardQrCodesController;
+use App\Http\Controllers\Dashboard\QrCodeController as DashboardQrCodesController;
 
 
 
