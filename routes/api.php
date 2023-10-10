@@ -18,7 +18,6 @@ use App\Http\Controllers\Dashboard\UserController as DashboardUserController;
 use App\Http\Controllers\Dashboard\QrCodeControllerController as DashboardQrCodesController;
 
 
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
