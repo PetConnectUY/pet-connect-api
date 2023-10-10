@@ -25,11 +25,14 @@ class QrCodeController extends Controller
             });
         }   
 
-        if($request->input('start_date') && $request->input('end_date'))
+        if($request->input('start_date'))
         {
-            $codes->where('created_at', '>=' , $request->input('start_date'))
-                ->where('created_at', '<=' , $request->input('end_date'));
-                
+            $codes->where('created_at', '>=', $request->input('start_date'));
+        }
+
+        if($request->input('end_date'))
+        {
+            $codes->where('created_at', '<=', $request->input('end_date'));
         }
 
         return $this->successResponse($codes->with('pet')->paginate(12));

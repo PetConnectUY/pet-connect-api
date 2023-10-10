@@ -23,9 +23,29 @@ class PetController extends Controller
             $pets->where('name', 'LIKE', '%'.$request->input('name').'%');
         }
 
-        if($request->input('birth_date'))
+        if($request->input('race'))
         {
-            $pets->where('birth_date', $request->input('birth_date'));
+            $pets->where('race', $request->input('race'));
+        }
+
+    
+        if($request->input('start_date'))
+        {
+            $pets->where('created_at', '>=', $request->input('start_date'));
+        }
+
+        if($request->input('end_date'))
+        {
+            $pets->where('created_at', '<=', $request->input('end_date'));
+        }
+
+        if($request->input('order'))
+        {
+            if($request->input('order') == 'a_z')
+                $pets->orderBy('name', 'asc');
+            if($request->input('order') == 'z_a')
+                $pets->orderBy('name', 'desc') ;          
+
         }
         
         return $this->successResponse($pets->paginate(self::PETS_PER_PAGE));
