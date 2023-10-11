@@ -44,7 +44,6 @@ class UserController extends Controller
                 ]);
 
                 DB::commit();
-                dd($user);
                 return $this->successResponse($user);
             } else 
             {
