@@ -66,10 +66,13 @@ Route::prefix('pets')->middleware(['jwt.auth', 'role.checker:' . implode(',', [U
 });
 
 //Pet Races routes
-Route::prefix('pets-races')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::ADMIN_ROLE])])->group(function () {
+Route::prefix('pets-races')->group(function () {
     Route::controller(PetRaceController::class)->group(function() {
-        Route::post('/', 'store');
-        Route::delete('/{id}', 'destroy');
+        Route::middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::ADMIN_ROLE])])->group(function() {
+            Route::post('/', 'store');
+            Route::delete('/{id}', 'destroy');
+        });
+        Route::get('/', 'index');
     });
 });
 

@@ -11,6 +11,12 @@ class PetRaceController extends Controller
 {
     use ApiResponser;
 
+    public function index()
+    {
+        return $this->successResponse(PetRace::get());
+        
+    }
+
     public function store(Request $request)
     {
         $messages = [
