@@ -32,9 +32,9 @@ use App\Http\Controllers\Dashboard\QrCodeController as DashboardQrCodesControlle
 
 // Auth routes
 Route::prefix('auth')->group(function () {
-    Route::post('login', [AuthController::class, 'login']);
+    Route::post('login', [AuthController::class, 'login'])->middleware('throttle:1,3');
     Route::middleware('jwt.refresh')->group(function () {
-        Route::post('refresh', [AuthController::class, 'refresh']);
+        Route::post('refresh', [AuthController::class, 'refresh'])->middleware('throttle:1,3');
     });
     
     Route::middleware('jwt.auth')->group(function () {
@@ -44,7 +44,7 @@ Route::prefix('auth')->group(function () {
 
 // Users routes
 Route::prefix('users')->group(function () {
-    Route::post('', [UserController::class, 'store']);
+    Route::post('', [UserController::class, 'store'])->middleware('throttle:1,3');
     Route::get('/check-username-exists/{username}', [UserController::class, 'checkUsernameAvailability']);
     Route::get('/check-email-exists/{email}', [UserController::class, 'checkEmailAvailability']);
     
