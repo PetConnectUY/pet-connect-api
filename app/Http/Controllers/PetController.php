@@ -49,7 +49,7 @@ class PetController extends Controller
             $pet = Pet::create([
                 'name' => $request->validated('name'),
                 'birth_date' => $request->validated('birth_date'),
-                'race' => $request->validated('race'),
+                'race_id' => $request->validated('race_id'),
                 'gender' => $request->validated('gender'),
                 'pet_information' => $request->validated('pet_information'),
                 'user_id' => auth()->user()->id,
@@ -86,7 +86,7 @@ class PetController extends Controller
             $pet->update([
                 'name' => $request->validated('name'),
                 'birth_date' => $request->validated('birth_date'),
-                'race' => $request->validated('race'),
+                'race_id' => $request->validated('race_id'),
                 'gender' => $request->validated('gender'),
                 'pet_information' => $request->validated('pet_information'),
                 'user_id' => auth()->user()->id,

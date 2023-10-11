@@ -37,6 +37,8 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $hidden = [
         'password',
+        'external_id',
+        'external_auth',
     ];
 
     protected $visible = [
@@ -46,8 +48,6 @@ class User extends Authenticatable implements JWTSubject
         'birth_date',
         'phone',
         'address',
-        'external_id',
-        'external_auth',
     ];
 
     public function getJWTIdentifier()

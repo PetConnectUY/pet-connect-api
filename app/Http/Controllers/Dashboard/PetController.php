@@ -25,7 +25,9 @@ class PetController extends Controller
 
         if($request->input('race'))
         {
-            $pets->where('race', $request->input('race'));
+            $pets->whereHas('race', function($query) use ($request) {
+                $query->where('id', $request->input('race'));
+            });
         }
     
         if($request->input('start_date'))

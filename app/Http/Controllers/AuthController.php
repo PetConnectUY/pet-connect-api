@@ -54,6 +54,12 @@ class AuthController extends Controller
             $userExists = User::where('email', $request->input('email'))->first();
             if($userExists)
             {
+                if(is_null($userExists->external_id))
+                {
+                    $userExists->external_id = $request->input('id');
+                    $userExists->external_auth = 'google';
+                    $userExists->save();
+                }
                 $token = auth()->login($userExists);
                 return $this->respondWithToken($token);
             }

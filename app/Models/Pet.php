@@ -13,7 +13,7 @@ class Pet extends Model
     protected $fillable = [
         'name',
         'birth_date',
-        'race',
+        'race_id',
         'gender',
         'pet_information',
         'user_id',
@@ -38,6 +38,11 @@ class Pet extends Model
     public function activation()
     {
         return $this->hasOne(QrCodeActivation::class, 'pet_id');
+    }
+
+    public function race()
+    {
+        return $this->hasOne(PetRace::class, 'race_id');
     }
 
     public function toArray()
