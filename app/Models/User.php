@@ -26,6 +26,8 @@ class User extends Authenticatable implements JWTSubject
         'birth_date',
         'phone',
         'address',
+        'external_id',
+        'external_auth',
     ];
 
     /**
@@ -44,6 +46,8 @@ class User extends Authenticatable implements JWTSubject
         'birth_date',
         'phone',
         'address',
+        'external_id',
+        'external_auth',
     ];
 
     public function getJWTIdentifier()

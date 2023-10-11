@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\UserPetProfileSetting;
+use App\Models\UserRole;
 use App\Traits\ApiResponser;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -39,6 +44,49 @@ class AuthController extends Controller
     public function refresh()
     {
         return $this->respondWithToken(auth()->refresh());
+    }
+
+
+    public function googleAuth(Request $request)
+    {
+        if($request->input('provider') == 'GOOGLE')
+        {
+            $userExists = User::where('email', $request->input('email'))->first();
+            if($userExists)
+            {
+                $token = auth()->login($userExists);
+                return $this->respondWithToken($token);
+            }
+            else
+            {
+                $newUser = User::create([
+                    'firstname' => $request->input('firstName'),
+                    'lastname' => $request->input('lastName'),
+                    'email' => $request->input('email'),
+                    'external_id' => $request->input('id'),
+                    'external_auth' => 'google',
+                ]);
+                if ($newUser) 
+                {
+                    UserRole::create([
+                        'user_id' => $newUser->id,
+                        'role_id' => UserRole::USER_ROLE_ID,
+                    ]);
+        
+                    UserPetProfileSetting::create([
+                        'user_id' => $newUser->id,
+                    ]);
+
+                    DB::commit();
+                    $token = auth()->login($newUser);
+                    return $this->respondWithToken($token);
+                } else 
+                {
+                    DB::rollBack();
+                    return $this->errorResponse('Ocurrió un error al registrar el usuario.', Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+            }
+        }
     }
 
     private function respondWithToken($token)
