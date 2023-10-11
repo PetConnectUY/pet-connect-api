@@ -27,7 +27,6 @@ class PetController extends Controller
         {
             $pets->where('race', $request->input('race'));
         }
-
     
         if($request->input('start_date'))
         {
@@ -44,8 +43,7 @@ class PetController extends Controller
             if($request->input('order') == 'a_z')
                 $pets->orderBy('name', 'asc');
             if($request->input('order') == 'z_a')
-                $pets->orderBy('name', 'desc') ;          
-
+                $pets->orderBy('name', 'desc');
         }
         
         return $this->successResponse($pets->paginate(self::PETS_PER_PAGE));
