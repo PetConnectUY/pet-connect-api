@@ -36,7 +36,7 @@ Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('/google', [AuthController::class, 'googleAuth']);
     Route::middleware('jwt.refresh')->group(function () {
-        Route::post('refresh', [AuthController::class, 'refresh']);
+        Route::post('refresh', [AuthController::class, 'refresh'])->middleware('throttle:1,3');
     });
     
     Route::middleware('jwt.auth')->group(function () {
@@ -46,9 +46,7 @@ Route::prefix('auth')->group(function () {
 
 // Users routes
 Route::prefix('users')->group(function () {
-    Route::post('', [UserController::class, 'store']);
-    Route::get('/check-email-exists/{email}', [UserController::class, 'checkEmailAvailability']);
-    
+    Route::post('', [UserController::class, 'store'])->middleware('throttle:1,3');
     Route::middleware('jwt.auth')->group(function () {
         Route::post('/{id}', [UserController::class, 'update']);
         Route::delete('/{id}', [UserController::class, 'destroy']);

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Anhskohbo\NoCaptcha\NoCaptcha;
+
 use App\Http\Requests\User\PutRequest;
 use App\Http\Requests\User\StoreRequest;
 use App\Models\User;
@@ -19,42 +21,45 @@ class UserController extends Controller
 
     public function store(StoreRequest $request)
     {
-        try
-        {
-            DB::beginTransaction();
-
-            $user = User::create([
-                'firstname' => $request->validated('firstname'),
-                'lastname' => $request->validated('lastname'),
-                'email' => $request->validated('email'),
-                'password' => Hash::make($request->validated('password')),
-                'birth_date' => $request->validated('birth_date'),
-                'phone' => $request->validated('phone'),
-                'address' => $request->validated('address')
-            ]);
-            if ($user) 
+        $response = $request->input('g-recaptcha-response');
+        $captcha = new NoCaptcha(config('services.recaptcha.secret'), config('services.recaptcha.sitekey'));
+        $isHuman = $captcha->verifyResponse($response);
+        if ($isHuman) {
+            try
             {
+                DB::beginTransaction();
+
+                $user = User::create([
+                    'firstname' => $request->validated('firstname'),
+                    'lastname' => $request->validated('lastname'),
+                    'email' => $request->validated('email'),
+                    'password' => Hash::make($request->validated('password')),
+                    'birth_date' => $request->validated('birth_date'),
+                    'phone' => $request->validated('phone'),
+                    'address' => $request->validated('address')
+                ]);
+
                 UserRole::create([
                     'user_id' => $user->id,
                     'role_id' => UserRole::USER_ROLE_ID,
                 ]);
-    
+
                 UserPetProfileSetting::create([
                     'user_id' => $user->id,
                 ]);
 
                 DB::commit();
+
                 return $this->successResponse($user);
-            } else 
+            }
+            catch(Exception $e)
             {
                 DB::rollBack();
-                return $this->errorResponse('Ocurrió un error al registrar el usuario.', Response::HTTP_INTERNAL_SERVER_ERROR);
+                return $this->errorResponse('Ocurrió un error al registrar el usuario. '.$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-        }
-        catch(Exception $e)
-        {
-            DB::rollBack();
-            return $this->errorResponse('Ocurrió un error al registrar el usuario. '.$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+
+        }else{
+            return $this->errorResponse('No se pudo completar la acción porque no se verificó el captcha', Response::HTTP_BAD_REQUEST);
         }
     }
 
