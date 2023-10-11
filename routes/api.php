@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\PetController as DashboardPetController;
 use App\Http\Controllers\Dashboard\UserController as DashboardUserController;
 use App\Http\Controllers\Dashboard\QrCodeController as DashboardQrCodesController;
-
+use App\Http\Controllers\PetRaceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,7 +44,6 @@ Route::prefix('auth')->group(function () {
 // Users routes
 Route::prefix('users')->group(function () {
     Route::post('', [UserController::class, 'store']);
-    Route::get('/check-username-exists/{username}', [UserController::class, 'checkUsernameAvailability']);
     Route::get('/check-email-exists/{email}', [UserController::class, 'checkEmailAvailability']);
     
     Route::middleware('jwt.auth')->group(function () {
@@ -61,6 +60,14 @@ Route::prefix('pets')->middleware(['jwt.auth', 'role.checker:' . implode(',', [U
         Route::get('/{id}', 'view');
         Route::post('', 'store');
         Route::post('/{id}', 'update');
+        Route::delete('/{id}', 'destroy');
+    });
+});
+
+//Pet Races routes
+Route::prefix('pets-races')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::ADMIN_ROLE])])->group(function () {
+    Route::controller(PetRaceController::class)->group(function() {
+        Route::post('/', 'store');
         Route::delete('/{id}', 'destroy');
     });
 });

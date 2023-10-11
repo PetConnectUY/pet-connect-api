@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->date('birth_date')->nullable();
-            $table->string('race')->nullable();
+            $table->foreignId('race_id')
+                ->constrained('pets_races', 'id');
             $table->string('gender');
             $table->text('pet_information');
             $table->foreignId('user_id')

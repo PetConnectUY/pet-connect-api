@@ -32,19 +32,25 @@ class UserController extends Controller
                 'phone' => $request->validated('phone'),
                 'address' => $request->validated('address')
             ]);
+            if ($user) 
+            {
+                UserRole::create([
+                    'user_id' => $user->id,
+                    'role_id' => UserRole::USER_ROLE_ID,
+                ]);
+    
+                UserPetProfileSetting::create([
+                    'user_id' => $user->id,
+                ]);
 
-            UserRole::create([
-                'user_id' => $user->id,
-                'role_id' => UserRole::USER_ROLE_ID,
-            ]);
-
-            UserPetProfileSetting::create([
-                'user_id' => $user->id,
-            ]);
-
-            DB::commit();
-
-            return $this->successResponse($user);
+                DB::commit();
+                dd($user);
+                return $this->successResponse($user);
+            } else 
+            {
+                DB::rollBack();
+                return $this->errorResponse('Ocurrió un error al registrar el usuario.', Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
         }
         catch(Exception $e)
         {
