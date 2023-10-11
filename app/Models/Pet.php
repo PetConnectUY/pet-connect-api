@@ -42,7 +42,7 @@ class Pet extends Model
 
     public function race()
     {
-        return $this->hasOne(PetRace::class, 'race_id');
+        return $this->hasOne(PetRace::class, 'id', 'race_id');
     }
 
     public function toArray()
