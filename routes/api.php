@@ -17,6 +17,8 @@ use App\Http\Controllers\Dashboard\PetController as DashboardPetController;
 use App\Http\Controllers\Dashboard\UserController as DashboardUserController;
 use App\Http\Controllers\Dashboard\QrCodeController as DashboardQrCodesController;
 use App\Http\Controllers\PetRaceController;
+use App\Models\User;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +34,7 @@ use App\Http\Controllers\PetRaceController;
 // Auth routes
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
+    Route::post('/google', [AuthController::class, 'googleAuth']);
     Route::middleware('jwt.refresh')->group(function () {
         Route::post('refresh', [AuthController::class, 'refresh']);
     });

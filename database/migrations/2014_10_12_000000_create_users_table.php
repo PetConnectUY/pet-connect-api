@@ -18,10 +18,12 @@ return new class extends Migration
             $table->string('firstname');
             $table->string('lastname');
             $table->string('email')->unique();
-            $table->string('password');
-            $table->date('birth_date');
-            $table->string('phone');
-            $table->string('address');
+            $table->string('password')->nullable();
+            $table->date('birth_date')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
+            $table->string('external_id')->nullable();
+            $table->string('external_auth')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
