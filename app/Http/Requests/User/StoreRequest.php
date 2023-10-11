@@ -28,6 +28,7 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
+            'g-recaptcha-response' => ['required'],
             'firstname' => ['required', 'min:3', 'max:16'],
             'lastname' => ['required', 'min:3', 'max:16'],
             'email' => ['required', 'email', 'unique:users,email'],
@@ -69,3 +70,4 @@ class StoreRequest extends FormRequest
         throw new ValidationException($validator, $response);
     }
 }
+ 
