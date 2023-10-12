@@ -49,6 +49,7 @@ Route::prefix('users')->group(function () {
     Route::post('', [UserController::class, 'store'])->middleware('throttle:1,3');
     Route::middleware('jwt.auth')->group(function () {
         Route::post('/{id}', [UserController::class, 'update']);
+        Route::post('/{id}/google', [UserController::class, 'updateGoogleRegistration']);
         Route::delete('/{id}', [UserController::class, 'destroy']);
         Route::get('/statistics', [StatisticController::class, 'userStatistic']);
     });

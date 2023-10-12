@@ -85,7 +85,6 @@ class QrCodeActivationController extends Controller
                 {
                     return $this->successResponse(['message' => 'Código qr activado']);
                 } else {
-                    
                     if(auth()->user() && $qrCode->activation->user_id == auth()->user()->id)
                     {
                         return $this->successResponse(['message' => 'Debe asignar mascota']);
@@ -100,8 +99,6 @@ class QrCodeActivationController extends Controller
             }
         }
     }
-
-
 
     public function activateQrWithUser(Request $request, $activationToken)
     {

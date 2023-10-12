@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Anhskohbo\NoCaptcha\NoCaptcha;
-
+use App\Http\Requests\User\GoogleRegistrationRequest;
 use App\Http\Requests\User\PutRequest;
 use App\Http\Requests\User\StoreRequest;
 use App\Models\User;
@@ -59,6 +59,48 @@ class UserController extends Controller
             }
 
         }else{
+            return $this->errorResponse('No se pudo completar la acción porque no se verificó el captcha', Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function updateGoogleRegistration(GoogleRegistrationRequest $request, $id)
+    {
+        $user = User::find($id);
+        if(is_null($user))
+        {
+            return $this->errorResponse('No se encontró el usuario.', Response::HTTP_NOT_FOUND);
+        }
+        $response = $request->input('g-recaptcha-response');
+        $captcha = new NoCaptcha(config('services.recaptcha.secret'), config('services.recaptcha.sitekey'));
+        $isHuman = $captcha->verifyResponse($response);
+        if ($isHuman) {
+            try
+            {
+                DB::beginTransaction();
+
+                $user->update([
+                    'firstname' => $request->validated('firstname'),
+                    'lastname' => $request->validated('lastname'),
+                    'email' => $request->validated('email'),
+                    'password' => Hash::make($request->validated('password')),
+                    'birth_date' => $request->validated('birth_date'),
+                    'phone' => $request->validated('phone'),
+                    'address' => $request->validated('address')
+                ]);
+
+                DB::commit();
+
+                return $this->successResponse($user);
+            }
+            catch(Exception $e)
+            {
+                DB::rollBack();
+                return $this->errorResponse('Ocurrió un error al registrar el usuario. '.$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+        }
+        else
+        {
             return $this->errorResponse('No se pudo completar la acción porque no se verificó el captcha', Response::HTTP_BAD_REQUEST);
         }
     }
