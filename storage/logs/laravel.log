@@ -2145,3 +2145,6 @@
 #42 /var/www/html/public/index.php(52): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #43 {main}
 "} 
+[2023-10-17 15:43:13] local.INFO: caso 1  
+[2023-10-17 15:45:10] local.INFO: caso 1  
+[2023-10-17 15:50:33] local.INFO: caso 2  

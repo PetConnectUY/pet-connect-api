@@ -49,7 +49,7 @@ class QrCodeActivationController extends Controller
                     * El código QR ya está en uso, la activación tiene un usuario y una mascota.
                     * Retorna el pet en la solicitud.
                 */
-                case (!is_null($qrCode->activation->user_id || !is_null($qrCode->activation->pet_id))):
+                case (!is_null($qrCode->activation->user_id) && !is_null($qrCode->activation->pet_id)):
                     return $this->successResponse($qrCode->activation->pet);
                     break;
                 /*
@@ -66,6 +66,11 @@ class QrCodeActivationController extends Controller
                         'pet_id.required' => 'El id de la mascota es requerida para activar el codigo qr.',
                         'pet_id.exists' => 'El id de la mascota no existe.'
                     ]);
+
+                    if(is_null($request->input('pet_id')))
+                    {
+                        return $this->errorResponse('Debe asignar la mascota al código QR.', Response::HTTP_BAD_REQUEST);
+                    }
                     try 
                     {
                         DB::beginTransaction();
@@ -106,44 +111,46 @@ class QrCodeActivationController extends Controller
                 ]);
                 $qrCode->is_used = true;
                 $qrCode->save();
-                // dd($cookie);
+                
                 return $this->successResponse(['message' => 'Se asignó el código QR con éxito'])
                     ->withCookie($cookie);
-            }
-            switch($qrCode->activation)
+            } else
             {
-                case (!is_null($qrCode->activation->user_id || !is_null($qrCode->activation->pet_id))):
-                    return $this->successResponse($qrCode->activation->pet);
-                    break;
-                case (!is_null($qrCode->activation->user_id) && $qrCode->activation->user_id == auth()->id() && is_null($qrCode->activation->pet_id)):
-                    $request->validate([
-                        'pet_id' => ['required', Rule::exists('pets', 'id')],
-                    ], [
-                        'pet_id.required' => 'El id de la mascota es requerida para activar el codigo qr.',
-                        'pet_id.exists' => 'El id de la mascota no existe.'
-                    ]);
-                    try 
-                    {
-                        DB::beginTransaction();
+                switch($qrCode->activation)
+                {
+                    case (!is_null($qrCode->activation->user_id) && !is_null($qrCode->activation->pet_id)):
+                        return $this->successResponse($qrCode->activation->pet);
+                        break;
+                    case (!is_null($qrCode->activation->user_id) && $qrCode->activation->user_id == auth()->id() && is_null($qrCode->activation->pet_id)):
+                        $request->validate([
+                            'pet_id' => ['required', Rule::exists('pets', 'id')],
+                        ], [
+                            'pet_id.required' => 'El id de la mascota es requerida para activar el codigo qr.',
+                            'pet_id.exists' => 'El id de la mascota no existe.'
+                        ]);
+                        try 
+                        {
+                            DB::beginTransaction();
 
-                        $qrCode->activation->pet_id = $request->input('pet_id');
-                        $qrCode->activation->save();
+                            $qrCode->activation->pet_id = $request->input('pet_id');
+                            $qrCode->activation->save();
 
-                        DB::commit();
+                            DB::commit();
 
-                        return $this->successResponse(['message' => 'La mascota fué asignada correctamente.']);
-                    } catch (Exception $e) 
-                    {
-                        DB::rollBack();
-                        return $this->errorResponse('Ocurrió un error al asignar la mascota al código qr.', Response::HTTP_INTERNAL_SERVER_ERROR);
-                    }
-                    break;
+                            return $this->successResponse(['message' => 'La mascota fué asignada correctamente.']);
+                        } catch (Exception $e) 
+                        {
+                            DB::rollBack();
+                            return $this->errorResponse('Ocurrió un error al asignar la mascota al código qr.', Response::HTTP_INTERNAL_SERVER_ERROR);
+                        }
+                        break;
                     case (!is_null($qrCode->activation->user_id) && $qrCode->activation->user_id != auth()->id() && is_null($qrCode->activation->pet_id)):
                         return $this->errorResponse('Este código QR no te pertenece.', Response::HTTP_BAD_REQUEST);
                         break;
                     default: 
                         return $this->errorResponse('Hay un caso no cubierto.', Response::HTTP_BAD_REQUEST);
                         break;
+                }
             }
         }
     }
