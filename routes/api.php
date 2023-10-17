@@ -120,9 +120,9 @@ Route::prefix('qr-codes')->group(function() {
         ->group(function() {
             Route::post('activate/{activationToken}', [QrCodeActivationController::class, 'activate']);
             Route::post('activate/set-user/{activationToken}', [QrCodeActivationController::class, 'activateQrWithUser']);
+            Route::get('manage-activation/{token}', [QrCodeActivationController::class, 'manageQrCode']);
         });
         Route::get('verify-activation/{activationToken}', [QrCodeActivationController::class, 'verifyQrActivation']);
-        Route::get('manage-activation/{token}', [QrCodeActivationController::class, 'manageQrCode']);
 });
 
 Route::prefix('pet-profiles')->group(function() {
