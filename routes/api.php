@@ -116,10 +116,8 @@ Route::prefix('qr-codes')->group(function() {
             Route::post('', [QrCodeController::class, 'generate']);
             Route::post('generate-image', [QrCodeController::class, 'generateQrImage']);
         });
-    Route::middleware('jwt.auth')
-        ->group(function() {
-            Route::get('manage-activation/{token}', [QrCodeActivationController::class, 'manageQrCode']);
-        });
+    Route::get('manage-activation/{token}', [QrCodeActivationController::class, 'manageQrCode']);
+    Route::get('activation-cookie/{token}', [QrCodeActivationController::class, 'getCookie']);
 });
 
 Route::prefix('pet-profiles')->group(function() {

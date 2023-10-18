@@ -19,7 +19,7 @@ class Cors
         $response = $next($request)
             ->header('Access-Control-Allow-Origin', 'http://localhost:4200')
             ->header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE')
-            ->header('Access-Control-Allow-Headers', '*')
+            ->header('Access-Control-Allow-Headers', 'Authorization, Content-Type, X-Requested-With')
             ->header('Access-Control-Allow-Credentials', 'true');
         return $response;
     }
