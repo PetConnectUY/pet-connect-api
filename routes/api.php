@@ -111,13 +111,12 @@ Route::prefix('store')->group(function() {
 });
 
 Route::prefix('qr-codes')->group(function() {
-    Route::middleware('role.checker:' . implode(',', [UserRole::ADMIN_ROLE]))
+    Route::middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::ADMIN_ROLE])])
         ->group(function() {
             Route::post('', [QrCodeController::class, 'generate']);
             Route::post('generate-image', [QrCodeController::class, 'generateQrImage']);
         });
-    Route::get('manage-activation/{token}', [QrCodeActivationController::class, 'manageQrCode']);
-    Route::get('activation-cookie/{token}', [QrCodeActivationController::class, 'getCookie']);
+    Route::post('manage-activation/{token}', [QrCodeActivationController::class, 'manageQrCode']);
 });
 
 Route::prefix('pet-profiles')->group(function() {
@@ -126,7 +125,7 @@ Route::prefix('pet-profiles')->group(function() {
 });
 
 
-Route::prefix('dashboard')->middleware((['jwt.auth']))->group(function() {
+Route::prefix('dashboard')->middleware('jwt.auth')->group(function() {
     Route::get('/my-pets', [DashboardPetController::class, 'getPets']);
     Route::get('/my-codes', [DashboardQrCodesController::class, 'getQrCodes']);
     Route::post('/change-settings', [DashboardUserController::class, 'changeSettings']);

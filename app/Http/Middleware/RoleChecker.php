@@ -20,7 +20,10 @@ class RoleChecker
     public function handle(Request $request, Closure $next, ...$roles)
     {
         $loggedUser = auth()->user();
-
+        if(is_null($loggedUser))
+        {
+            return $this->errorResponse('Unauthorized', Response::HTTP_UNAUTHORIZED);
+        }
         if(!in_array($loggedUser->role->name, $roles))
         {
             return $this->errorResponse('No tienes permisos para realizar esta acción', Response::HTTP_FORBIDDEN);
