@@ -7,6 +7,7 @@ use App\Models\Pet;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
@@ -14,15 +15,21 @@ class PetController extends Controller
 {
     use ApiResponser;
 
-    public function index()
+    CONST PETS_PER_PAGE = 12;
+
+    public function index(Request $request)
     {
         $pets = Pet::whereHas('user', function($query){
             $query->where('deleted_at', null);
         })
-        ->where('user_id', auth()->user()->id)
-        ->paginate(10);
+        ->doesntHave('activation')
+        ->where('user_id', auth()->user()->id);
 
-        return $this->successResponse($pets);
+        $perPage = self::PETS_PER_PAGE;
+
+        $request->input('total') != null ? $perPage = $request->input('total') : $perPage;
+
+        return $this->successResponse($pets->paginate($perPage));
     }
 
     public function view($id)
