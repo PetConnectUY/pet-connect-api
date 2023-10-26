@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PetRequest;
 use App\Models\Pet;
 use App\Traits\ApiResponser;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -48,7 +49,7 @@ class PetController extends Controller
             DB::beginTransaction();
             $pet = Pet::create([
                 'name' => $request->validated('name'),
-                'birth_date' => $request->validated('birth_date'),
+                'birth_date' => Carbon::parse($request->validated('birth_date'))->format('Y-m-d'),
                 'race_id' => $request->validated('race_id'),
                 'gender' => $request->validated('gender'),
                 'pet_information' => $request->validated('pet_information'),
