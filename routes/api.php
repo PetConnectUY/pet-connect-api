@@ -9,6 +9,7 @@ use App\Http\Controllers\PetProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\QrCodeActivationController;
 use App\Http\Controllers\QrCodeController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StatisticController;
 use App\Http\Controllers\UserController;
@@ -111,13 +112,12 @@ Route::prefix('store')->group(function() {
 });
 
 Route::prefix('qr-codes')->group(function() {
-    Route::middleware('role.checker:' . implode(',', [UserRole::ADMIN_ROLE]))
+    Route::middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::ADMIN_ROLE])])
         ->group(function() {
             Route::post('', [QrCodeController::class, 'generate']);
             Route::post('generate-image', [QrCodeController::class, 'generateQrImage']);
         });
-    Route::get('manage-activation/{token}', [QrCodeActivationController::class, 'manageQrCode']);
-    Route::get('activation-cookie/{token}', [QrCodeActivationController::class, 'getCookie']);
+    Route::post('manage-activation/{token}', [QrCodeActivationController::class, 'manageQrCode']);
 });
 
 Route::prefix('pet-profiles')->group(function() {
@@ -131,4 +131,15 @@ Route::prefix('dashboard')->middleware((['jwt.auth']))->group(function() {
     Route::get('/my-codes', [DashboardQrCodesController::class, 'getQrCodes']);
     Route::post('/change-settings', [DashboardUserController::class, 'changeSettings']);
     Route::get('/get-settings', [DashboardUserController::class, 'getSettings']);
+});
+
+// Clients routes
+Route::prefix('clients')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::USER_ROLE, UserRole::PREMIUM_ROLE, UserRole::PREMIUM_PLUS, UserRole::AFFILIATE, UserRole::ADMIN_ROLE])])->group(function () {
+    Route::controller(ClientController::class)->group(function () {
+        //Route::get('', 'index');
+        Route::get('/{id}', 'view');
+        Route::post('', 'store');
+        Route::post('/{id}', 'update');
+        Route::delete('/{id}', 'destroy');
+    });
 });

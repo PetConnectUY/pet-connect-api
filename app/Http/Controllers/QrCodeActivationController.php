@@ -95,15 +95,13 @@ class QrCodeActivationController extends Controller
             {
                 if(is_null($qrCode->activation))
                 {
-                    $cookie = $this->makeCookie($token);
                     QrCodeActivation::create([
                         'qr_code_id' => $qrCode->id,
                         'user_id' => auth()->user()->id,
                     ]);
                     $qrCode->is_used = true;
                     $qrCode->save();
-                    return $this->successResponse(['message' => 'Se asignó el código QR con éxito'])
-                        ->withCookie($cookie);
+                    return $this->successResponse(['message' => 'Se asignó el código QR con éxito']);
                 }
             }
         }
