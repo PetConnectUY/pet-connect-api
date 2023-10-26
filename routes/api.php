@@ -126,7 +126,7 @@ Route::prefix('pet-profiles')->group(function() {
 });
 
 
-Route::prefix('dashboard')->middleware((['jwt.auth']))->group(function() {
+Route::prefix('dashboard')->middleware('jwt.auth')->group(function() {
     Route::get('/my-pets', [DashboardPetController::class, 'getPets']);
     Route::get('/my-codes', [DashboardQrCodesController::class, 'getQrCodes']);
     Route::post('/change-settings', [DashboardUserController::class, 'changeSettings']);
