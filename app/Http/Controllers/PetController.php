@@ -19,17 +19,14 @@ class PetController extends Controller
 
     public function index(Request $request)
     {
-        $pets = Pet::whereHas('user', function($query){
+        $pets = Pet::select('id', 'name')
+        ->whereHas('user', function($query){
             $query->where('deleted_at', null);
         })
         ->doesntHave('activation')
         ->where('user_id', auth()->user()->id);
 
-        $perPage = self::PETS_PER_PAGE;
-
-        $request->input('total') != null ? $perPage = $request->input('total') : $perPage;
-
-        return $this->successResponse($pets->paginate($perPage));
+        return $this->successResponse($pets->paginate($request->input('total', self::PETS_PER_PAGE)));
     }
 
     public function view($id)

@@ -56,11 +56,11 @@ class Pet extends Model
             'pet_information' => $this->pet_information,
             'images' => $this->images,
             'user' => [
-                'firstname' => $this->settings->user_fullname_visible == 1 ? $this->user->firstname : null,
-                'lastname' => $this->settings->user_fullname_visible == 1 ? $this->user->lastname : null,
-                'email' => $this->settings->user_email_visible == 1 ? $this->user->email : null,
-                'phone' => $this->settings->user_phone_visible == 1 ? $this->user->phone : null,
-                'address' => $this->settings->user_location_visible == 1 ? $this->user->address : null,
+                'firstname' => $this->settings && $this->settings->user_fullname_visible == 1 ? $this->user->firstname : null,
+                'lastname' => $this->settings && $this->settings->user_fullname_visible == 1 ? $this->user->lastname : null,
+                'email' => $this->settings && $this->settings->user_email_visible == 1 ? $this->user->email : null,
+                'phone' => $this->settings && $this->settings->user_phone_visible == 1 ? $this->user->phone : null,
+                'address' => $this->settings && $this->settings->user_location_visible == 1 ? $this->user->address : null,
             ],
             'pet_token' => [
                 'id' => $this->activation && $this->activation->id != null ? $this->activation->id : null,
