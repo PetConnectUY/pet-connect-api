@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('pets', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('type', 1);
             $table->date('birth_date')->nullable();
             $table->foreignId('race_id')
                 ->constrained('pets_races', 'id');

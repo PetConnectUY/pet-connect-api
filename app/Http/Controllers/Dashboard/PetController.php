@@ -47,7 +47,11 @@ class PetController extends Controller
             if($request->input('order') == 'z_a')
                 $pets->orderBy('name', 'desc');
         }
+
+        $perPage = self::PETS_PER_PAGE;
+
+        $request->input('total') != null ? $perPage = $request->input('total') : $perPage;
         
-        return $this->successResponse($pets->paginate(self::PETS_PER_PAGE));
+        return $this->successResponse($pets->paginate($perPage));
     }
 }

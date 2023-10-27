@@ -7,6 +7,7 @@ use App\Models\Pet;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
@@ -14,15 +15,18 @@ class PetController extends Controller
 {
     use ApiResponser;
 
-    public function index()
+    CONST PETS_PER_PAGE = 12;
+
+    public function index(Request $request)
     {
-        $pets = Pet::whereHas('user', function($query){
+        $pets = Pet::select('id', 'name')
+        ->whereHas('user', function($query){
             $query->where('deleted_at', null);
         })
-        ->where('user_id', auth()->user()->id)
-        ->paginate(10);
+        ->doesntHave('activation')
+        ->where('user_id', auth()->user()->id);
 
-        return $this->successResponse($pets);
+        return $this->successResponse($pets->paginate($request->input('total', self::PETS_PER_PAGE)));
     }
 
     public function view($id)
@@ -49,6 +53,7 @@ class PetController extends Controller
             DB::beginTransaction();
             $pet = Pet::create([
                 'name' => $request->validated('name'),
+                'type' => $request->validated('type'),
                 'birth_date' => Carbon::parse($request->validated('birth_date'))->format('Y-m-d'),
                 'race_id' => $request->validated('race_id'),
                 'gender' => $request->validated('gender'),
@@ -86,6 +91,7 @@ class PetController extends Controller
 
             $pet->update([
                 'name' => $request->validated('name'),
+                'type' => $request->validated('type'),
                 'birth_date' => $request->validated('birth_date'),
                 'race_id' => $request->validated('race_id'),
                 'gender' => $request->validated('gender'),
