@@ -30,6 +30,7 @@ class PetRequest extends FormRequest
     {
         return [
             'name' => ['required', 'min:3', 'regex:/^[a-zA-ZáÁéÉíÍóÓúÚñÑ\s]+$/u'],
+            'type' => ['required', Rule::in(['d', 'c'])],
             'birth_date' => ['nullable', 'date'],
             'race_id' => ['nullable', 'exists:pets_races,id'],
             'gender' => ['required', Rule::in(['male', 'female'])],

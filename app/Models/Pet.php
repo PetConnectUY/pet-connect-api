@@ -12,6 +12,7 @@ class Pet extends Model
 
     protected $fillable = [
         'name',
+        'type',
         'birth_date',
         'race_id',
         'gender',
@@ -49,6 +50,7 @@ class Pet extends Model
     {
         return [
             'id' => $this->id,
+            'type' => $this->type,
             'name' => $this->name,
             'birth_date' => $this->birth_date,
             'race' => $this->race,

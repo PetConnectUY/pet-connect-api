@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('pets_races', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('type', '1');
         });
     }
 

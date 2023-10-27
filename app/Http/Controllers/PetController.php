@@ -53,6 +53,7 @@ class PetController extends Controller
             DB::beginTransaction();
             $pet = Pet::create([
                 'name' => $request->validated('name'),
+                'type' => $request->validated('type'),
                 'birth_date' => Carbon::parse($request->validated('birth_date'))->format('Y-m-d'),
                 'race_id' => $request->validated('race_id'),
                 'gender' => $request->validated('gender'),
@@ -90,6 +91,7 @@ class PetController extends Controller
 
             $pet->update([
                 'name' => $request->validated('name'),
+                'type' => $request->validated('type'),
                 'birth_date' => $request->validated('birth_date'),
                 'race_id' => $request->validated('race_id'),
                 'gender' => $request->validated('gender'),

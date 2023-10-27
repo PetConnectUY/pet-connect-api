@@ -11,10 +11,11 @@ class PetRaceController extends Controller
 {
     use ApiResponser;
 
-    public function index()
+    public function index(Request $request)
     {
-        return $this->successResponse(PetRace::get());
-        
+        $query = PetRace::query();
+        $query->where('type', $request->input('type', 'd'));
+        return $this->successResponse($query->get());
     }
 
     public function store(Request $request)
