@@ -92,7 +92,7 @@ class PetController extends Controller
             $pet->update([
                 'name' => $request->validated('name'),
                 'type' => $request->validated('type'),
-                'birth_date' => $request->validated('birth_date'),
+                'birth_date' => Carbon::parse($request->validated('birth_date'))->format('Y-m-d'),
                 'race_id' => $request->validated('race_id'),
                 'gender' => $request->validated('gender'),
                 'pet_information' => $request->validated('pet_information'),
@@ -105,7 +105,7 @@ class PetController extends Controller
         catch(Exception $e)
         {
             DB::rollBack();
-            return $this->errorResponse('Ocurrió un error al actualizar la mascota', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->errorResponse('Ocurrió un error al actualizar la mascota. '.$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
