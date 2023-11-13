@@ -133,13 +133,8 @@ Route::prefix('dashboard')->middleware('jwt.auth')->group(function() {
     Route::get('/get-settings', [DashboardUserController::class, 'getSettings']);
 });
 
-// Clients routes
-Route::prefix('clients')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::USER_ROLE, UserRole::PREMIUM_ROLE, UserRole::PREMIUM_PLUS, UserRole::AFFILIATE, UserRole::ADMIN_ROLE])])->group(function () {
-    Route::controller(ClientController::class)->group(function () {
-        //Route::get('', 'index');
-        Route::get('/{id}', 'view');
-        Route::post('', 'store');
-        Route::post('/{id}', 'update');
-        Route::delete('/{id}', 'destroy');
-    });
+Route::prefix('clients')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::ADMIN_ROLE])])->group(function() {
+    Route::post('', [ClientController::class, 'store']);
+    Route::post('{id}', [ClientController::class, 'update']);
+    Route::delete('{id}', [ClientController::class, 'destroy']);
 });

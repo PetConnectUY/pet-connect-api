@@ -13,13 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('client_qr_codes', function (Blueprint $table) {
+        Schema::create('client_branchs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('qr_code_id')
-                ->constrained('qr_codes');
-            $table->foreignId('client_id')
-                ->constrained('clients');
+            $table->unsignedBigInteger('client_id');
+            $table->foreign('client_id')->references('id')->on('clients');
+            $table->string('contact_firstname');
+            $table->string('address');
+            $table->string('phone');
+            $table->string('email')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -30,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('client_qr_codes');
+        Schema::dropIfExists('client_branchs');
     }
 };

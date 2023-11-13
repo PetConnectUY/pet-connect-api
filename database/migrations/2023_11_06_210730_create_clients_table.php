@@ -16,10 +16,7 @@ return new class extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('address');
-            $table->string('phone')->unique();
-            $table->string('contact_name')->nullable();
-            $table->string('email')->unique()->nullable();
+            $table->string('central_address');
             $table->timestamps();
             $table->softDeletes();
         });

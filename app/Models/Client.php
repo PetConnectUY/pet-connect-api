@@ -12,16 +12,15 @@ class Client extends Model
 
     protected $fillable = [
         'name',
-        'access_token',
-        'address',
-        'phone',
-        'contact_name',
-        'email',
+        'central_address',
     ];
 
-    public function qrCodes()
+    public function toArray()
     {
-        return $this->hasMany(ClientQrCode::class, 'client_id');
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'central_address' => $this->central_address
+        ];
     }
-
 }
