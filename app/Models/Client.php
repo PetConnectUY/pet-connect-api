@@ -15,12 +15,17 @@ class Client extends Model
         'central_address',
     ];
 
+    public function branches() {
+        return $this->hasMany(ClientBranch::class, 'client_id');
+    }
+
     public function toArray()
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'central_address' => $this->central_address
+            'central_address' => $this->central_address,
+            'branches' => $this->branches,
         ];
     }
 }

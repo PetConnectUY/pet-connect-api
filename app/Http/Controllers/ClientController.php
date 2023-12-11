@@ -14,6 +14,13 @@ class ClientController extends Controller
 {
     use ApiResponser;
 
+    public function index(Request $request) {
+        $clients = Client::where('deleted_at', null)
+            ->get();
+
+        return $this->successResponse($clients);
+    }
+
     public function store(ClientRequest $request)
     {
         $client = Client::create([

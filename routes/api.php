@@ -2,6 +2,7 @@
 
 use App\Classes\UserRole;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClientBranchController;
 use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\PetController;
 use App\Http\Controllers\PetImageController;
@@ -133,8 +134,14 @@ Route::prefix('dashboard')->middleware('jwt.auth')->group(function() {
     Route::get('/get-settings', [DashboardUserController::class, 'getSettings']);
 });
 
-Route::prefix('clients')->middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::ADMIN_ROLE])])->group(function() {
-    Route::post('', [ClientController::class, 'store']);
-    Route::post('{id}', [ClientController::class, 'update']);
-    Route::delete('{id}', [ClientController::class, 'destroy']);
+Route::prefix('clients')->group(function() {
+    Route::get('', [ClientController::class, 'index']);
+    Route::middleware(['jwt.auth', 'role.checker:' . implode(',', [UserRole::ADMIN_ROLE])])->group(function() {
+        Route::post('', [ClientController::class, 'store']);
+        Route::post('{id}', [ClientController::class, 'update']);
+        Route::delete('{id}', [ClientController::class, 'destroy']);
+        Route::post('{clientId}/branchs', [ClientBranchController::class, 'store']);
+        Route::post('{clientId}/branchs/{id}', [ClientBranchController::class, 'update']);
+        Route::delete('{clientId}/branchs/{id}', [ClientBranchController::class, 'destroy']);
+    });
 });

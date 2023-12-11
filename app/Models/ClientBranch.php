@@ -19,6 +19,17 @@ class ClientBranch extends Model
 
     public function clients()
     {
-        return $this->hasOne(Client::class, 'client_id');
+        return $this->hasOne(Client::class, 'id', 'client_id');
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'contact_firstname' => $this->contact_firstname,
+            'address' => $this->address,
+            'phone' => $this->phone,
+            'email' => $this->email,
+        ];
     }
 }
