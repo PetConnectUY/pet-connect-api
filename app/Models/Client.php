@@ -13,6 +13,8 @@ class Client extends Model
     protected $fillable = [
         'name',
         'central_address',
+        'image',
+        'url'
     ];
 
     public function branches() {
@@ -25,6 +27,7 @@ class Client extends Model
             'id' => $this->id,
             'name' => $this->name,
             'central_address' => $this->central_address,
+            'url' => $this->url,
             'branches' => $this->branches,
         ];
     }

@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('central_address');
+            $table->enum('image', [1, 0]);
+            $table->string('url');
             $table->timestamps();
             $table->softDeletes();
         });

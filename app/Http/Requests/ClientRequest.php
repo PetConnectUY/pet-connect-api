@@ -30,6 +30,7 @@ class ClientRequest extends FormRequest
         return [
             'name' => ['required'],
             'central_address' => ['required'],
+            'image' => ['required', 'mimes:jpg,png,jpeg,JPG,PNG,JPEG'],
         ];
     }
 
