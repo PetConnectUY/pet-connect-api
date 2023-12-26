@@ -48,7 +48,7 @@ Route::prefix('auth')->group(function () {
 
 // Users routes
 Route::prefix('users')->group(function () {
-    Route::post('', [UserController::class, 'store'])->middleware('throttle:1,3');
+    Route::post('', [UserController::class, 'store']);
     Route::middleware('jwt.auth')->group(function () {
         Route::post('/{id}', [UserController::class, 'update']);
         Route::post('/{id}/google', [UserController::class, 'updateGoogleRegistration']);

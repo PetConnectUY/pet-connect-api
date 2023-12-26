@@ -94,6 +94,11 @@ class QrCodeActivationController extends Controller
                     $qrCode->is_used = true;
                     $qrCode->save();
                     return $this->successResponse(['message' => 'Se asignó el código QR con éxito']);
+                } else {
+                    $qrCode->is_used = false;
+                    $qrCode->save();
+                    $qrCode->activation->delete();
+                    return $this->errorResponse('Intente nuevamente.', Response::HTTP_BAD_REQUEST);
                 }
             }
         }

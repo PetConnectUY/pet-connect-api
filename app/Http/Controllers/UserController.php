@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\UserPetProfileSetting;
 use App\Models\UserRole;
 use App\Traits\ApiResponser;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -34,7 +35,7 @@ class UserController extends Controller
                     'lastname' => $request->validated('lastname'),
                     'email' => $request->validated('email'),
                     'password' => Hash::make($request->validated('password')),
-                    'birth_date' => $request->validated('birth_date'),
+                    'birth_date' => Carbon::parse($request->validated('birth_date'))->format('Y-m-d'),
                     'phone' => $request->validated('phone'),
                     'address' => $request->validated('address')
                 ]);
@@ -83,7 +84,7 @@ class UserController extends Controller
                     'lastname' => $request->validated('lastname'),
                     'email' => $request->validated('email'),
                     'password' => Hash::make($request->validated('password')),
-                    'birth_date' => $request->validated('birth_date'),
+                    'birth_date' => Carbon::parse($request->validated('birth_date'))->format('Y-m-d'),
                     'phone' => $request->validated('phone'),
                     'address' => $request->validated('address')
                 ]);
@@ -119,7 +120,7 @@ class UserController extends Controller
             $user->update([
                 'firstname' => $request->validated('firstname'),
                 'lastname' => $request->validated('lastname'),
-                'birth_date' => $request->validated('birth_date'),
+                'birth_date' => Carbon::parse($request->validated('birth_date'))->format('Y-m-d'),
                 'phone' => $request->validated('phone'),
                 'address' => $request->validated('address')
             ]);
