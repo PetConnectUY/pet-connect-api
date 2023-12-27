@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Anhskohbo\NoCaptcha\NoCaptcha;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\User\GoogleRegistrationRequest;
 use App\Http\Requests\User\PutRequest;
 use App\Http\Requests\User\StoreRequest;
@@ -12,6 +13,7 @@ use App\Models\UserRole;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -159,5 +161,4 @@ class UserController extends Controller
         $user = User::where('email', $email)->first();
         return $this->successResponse(!empty($user));
     }
-
 }

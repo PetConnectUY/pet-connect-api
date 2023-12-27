@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Models\UserPetProfileSetting;
 use App\Http\Requests\PetSettingRequest;
+use App\Models\User;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
 
@@ -41,5 +43,14 @@ class UserController extends Controller
         }
 
         return $this->successResponse($setting);
+    }
+
+    public function changePassword(ChangePasswordRequest $request) {
+        $user = User::find(auth()->user()->id);
+
+        if(is_null($user))
+        {
+            return $this->errorResponse('No se encontró el usuario', Response::HTTP_NOT_FOUND);
+        }
     }
 }

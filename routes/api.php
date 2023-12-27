@@ -132,6 +132,7 @@ Route::prefix('dashboard')->middleware('jwt.auth')->group(function() {
     Route::get('/my-codes', [DashboardQrCodesController::class, 'getQrCodes']);
     Route::post('/change-settings', [DashboardUserController::class, 'changeSettings']);
     Route::get('/get-settings', [DashboardUserController::class, 'getSettings']);
+    Route::post('/change-password', [DashboardUserController::class, 'changePassword']);
 });
 
 Route::prefix('clients')->group(function() {
