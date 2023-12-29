@@ -64,6 +64,6 @@ class UserController extends Controller
 
         ChangePasswordJob::dispatch($user->firstname. ' '. $user->lastname, $user->email);
 
-        return $this->successResponse('Contraseña cambiada exitosamente', Response::HTTP_OK);
+        return $this->successResponse(['message' => 'Contraseña cambiada exitosamente']);
     }
 }
