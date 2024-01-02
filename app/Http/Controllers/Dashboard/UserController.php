@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Models\UserPetProfileSetting;
 use App\Http\Requests\PetSettingRequest;
+use App\Http\Requests\ValidateExistentEmailRequest;
 use App\Jobs\ChangePasswordJob;
 use App\Models\User;
 use App\Traits\ApiResponser;
@@ -65,5 +66,9 @@ class UserController extends Controller
         ChangePasswordJob::dispatch($user->firstname. ' '. $user->lastname, $user->email);
 
         return $this->successResponse(['message' => 'Contraseña cambiada exitosamente']);
+    }
+
+    public function validateExistentEmail(ValidateExistentEmailRequest $request) {
+        return $this->successResponse(['message' => 'Email validado correctamente.']);
     }
 }
