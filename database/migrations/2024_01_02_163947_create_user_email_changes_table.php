@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('user_email_changes', function (Blueprint $table) {
             $table->id();
             $table->string('current_email');
-            $table->foreign('current_email')->references('email')->on('users');
             $table->string('new_email');
             $table->string('token')->unique();
             $table->tinyInteger('changed')->default('0');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

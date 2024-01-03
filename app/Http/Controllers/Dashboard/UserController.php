@@ -4,18 +4,26 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\ConfirmEmailChangeRequest;
 use App\Models\UserPetProfileSetting;
 use App\Http\Requests\PetSettingRequest;
 use App\Http\Requests\ValidateExistentEmailRequest;
+use App\Jobs\ChangeEmailJob;
 use App\Jobs\ChangePasswordJob;
+use App\Jobs\EmailChangedJob;
 use App\Models\User;
+use App\Models\UserEmailChange;
 use App\Traits\ApiResponser;
+use App\Traits\UUID;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    use ApiResponser;
+    use ApiResponser, UUID;
 
     public function changeSettings(PetSettingRequest $request)
     {
@@ -48,7 +56,8 @@ class UserController extends Controller
         return $this->successResponse($setting);
     }
 
-    public function changePassword(ChangePasswordRequest $request) {
+    public function changePassword(ChangePasswordRequest $request) 
+    {
         $user = User::find(auth()->user()->id);
 
         if(is_null($user))
@@ -68,7 +77,99 @@ class UserController extends Controller
         return $this->successResponse(['message' => 'Contraseña cambiada exitosamente']);
     }
 
-    public function validateExistentEmail(ValidateExistentEmailRequest $request) {
-        return $this->successResponse(['message' => 'Email validado correctamente.']);
+    public function validateExistentEmail(ValidateExistentEmailRequest $request) 
+    {
+        try
+        {
+            DB::beginTransaction();
+
+            $checkExistentChange = UserEmailChange::where('current_email', $request->validated('current_email'))
+                ->where('changed', 0)
+                ->first();
+            
+            if($checkExistentChange) {
+                if($checkExistentChange->new_email != $request->validated('new_email'))
+                {
+                    $checkExistentChange->update(['new_email' => $request->validated('new_email')]);
+                    DB::commit();
+                    ChangeEmailJob::dispatch($checkExistentChange->current_email, $checkExistentChange->token);
+                    return $this->successResponse(['message' => 'Código generado con éxito.']);
+                } else
+                {
+                    $tokenExpirationTime = Carbon::parse($checkExistentChange->created_at)->addMinutes(30);
+                    if(Carbon::now()->gt($tokenExpirationTime))
+                    {
+                        $checkExistentChange->update(['created_at', Carbon::now()]);
+                        ChangeEmailJob::dispatch($checkExistentChange->current_email, $checkExistentChange->token);
+                        DB::commit();
+                        return $this->successResponse(['message' => 'Código generado con éxito.']);
+                    }
+                    ChangeEmailJob::dispatch($checkExistentChange->current_email, $checkExistentChange->token);
+                    return $this->successResponse(['message' => 'Código generado con éxito.']);
+                }
+            }
+
+            $emailChange = new UserEmailChange();
+            $emailChange->current_email = $request->validated('current_email');
+            $emailChange->new_email = $request->validated('new_email');
+            $emailChange->token = $this->generateToken($emailChange, 'token');
+            $emailChange->changed = 0;
+            $emailChange->save();
+
+            ChangeEmailJob::dispatch($emailChange->current_email, $emailChange->token);
+
+            DB::commit();
+            return $this->successResponse(['message' => 'Código generado con éxito.']);
+        } 
+        catch(Exception $e)
+        {
+            DB::rollBack();
+            return $this->errorResponse(['message' => 'Error al validar el email'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function confirmChangeEmail(ConfirmEmailChangeRequest $request)
+    {
+        try
+        {
+            DB::beginTransaction();
+            $emailChange = UserEmailChange::where('token', $request->validated('token'))
+                ->first();
+            if(is_null($emailChange))
+            {
+                return $this->errorResponse('No se encontró el cambió de email', Response::HTTP_NOT_FOUND);            
+            }
+            $tokenExpirationTime = Carbon::parse($emailChange->created_at)->addMinutes(30);
+            if(Carbon::now()->gt($tokenExpirationTime))
+            {
+                $emailChange->delete();
+                return $this->errorResponse('El código de confirmación ya expiro, debes generar otro', Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+            $user = User::where('email', $emailChange->current_email)
+                ->where('id', auth()->user()->id)
+                ->first();
+            
+            if(is_null($user))
+            {
+                return $this->errorResponse('No se encontró el usuario', Response::HTTP_NOT_FOUND);
+            }
+
+            $user->update([
+                'email' => $emailChange->new_email,
+            ]);
+
+            $emailChange->update([
+                'changed' => 1,
+            ]);
+
+            DB::commit();
+            EmailChangedJob::dispatch($user->email, $user->firstname. ' '. $user->lastname);
+
+            return $this->successResponse(['message' => 'Email actualizado con éxito']);
+        } catch(Exception $e)
+        {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

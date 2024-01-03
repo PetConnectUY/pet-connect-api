@@ -134,6 +134,7 @@ Route::prefix('dashboard')->middleware('jwt.auth')->group(function() {
     Route::get('/get-settings', [DashboardUserController::class, 'getSettings']);
     Route::post('/change-password', [DashboardUserController::class, 'changePassword']);
     Route::post('/validate-existent-email', [DashboardUserController::class, 'validateExistentEmail']);
+    Route::post('/confirm-change-email', [DashboardUserController::class, 'confirmChangeEmail']);
 });
 
 Route::prefix('clients')->group(function() {
