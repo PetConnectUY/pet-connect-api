@@ -49,49 +49,57 @@ class AuthController extends Controller
 
     public function googleAuth(Request $request)
     {
-        if($request->input('provider') == 'GOOGLE')
+        try 
         {
-            $userExists = User::where('email', $request->input('email'))->first();
-            if($userExists)
+            if($request->input('provider') == 'GOOGLE')
             {
-                if(is_null($userExists->external_id))
+                $userExists = User::where('email', $request->input('email'))->first();
+                if($userExists)
                 {
-                    $userExists->external_id = $request->input('id');
-                    $userExists->external_auth = 'google';
-                    $userExists->save();
-                }
-                $token = auth()->login($userExists);
-                return $this->respondWithToken($token);
-            }
-            else
-            {
-                $newUser = User::create([
-                    'firstname' => $request->input('firstName'),
-                    'lastname' => $request->input('lastName'),
-                    'email' => $request->input('email'),
-                    'external_id' => $request->input('id'),
-                    'external_auth' => 'google',
-                ]);
-                if ($newUser) 
-                {
-                    UserRole::create([
-                        'user_id' => $newUser->id,
-                        'role_id' => UserRole::USER_ROLE_ID,
-                    ]);
-        
-                    UserPetProfileSetting::create([
-                        'user_id' => $newUser->id,
-                    ]);
-
-                    DB::commit();
-                    $token = auth()->login($newUser);
+                    if(is_null($userExists->external_id))
+                    {
+                        $userExists->external_id = $request->input('id');
+                        $userExists->external_auth = 'google';
+                        $userExists->save();
+                    }
+                    $token = auth()->login($userExists);
                     return $this->respondWithToken($token);
-                } else 
-                {
-                    DB::rollBack();
-                    return $this->errorResponse('Ocurrió un error al registrar el usuario.', Response::HTTP_INTERNAL_SERVER_ERROR);
                 }
-            }
+                else
+                {
+                    $newUser = User::create([
+                        'firstname' => $request->input('firstName'),
+                        'lastname' => $request->input('lastName'),
+                        'email' => $request->input('email'),
+                        'external_id' => $request->input('id'),
+                        'external_auth' => 'google',
+                    ]);
+                    if ($newUser) 
+                    {
+                        UserRole::create([
+                            'user_id' => $newUser->id,
+                            'role_id' => UserRole::USER_ROLE_ID,
+                        ]);
+            
+                        UserPetProfileSetting::create([
+                            'user_id' => $newUser->id,
+                        ]);
+
+                        DB::commit();
+                        $token = auth()->login($newUser);
+                        return $this->respondWithToken($token);
+                    } else 
+                    {
+                        DB::rollBack();
+                        return $this->errorResponse('Ocurrió un error al registrar el usuario.', Response::HTTP_INTERNAL_SERVER_ERROR);
+                    }
+                }
+            }    
+        }
+        catch(Exception $e)
+        {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
