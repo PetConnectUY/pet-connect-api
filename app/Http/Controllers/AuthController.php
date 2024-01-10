@@ -41,7 +41,7 @@ class AuthController extends Controller
         return $this->successResponse(['message' => 'Session closed.']);
     }
 
-    public function refresh()
+    public function refresh() //TIRABA ERROR
     {
         return $this->respondWithToken(auth()->refresh());
     }
@@ -108,7 +108,7 @@ class AuthController extends Controller
         return $this->successResponse([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL(),
+            'expires_in' => auth()->factory()->getTTL(), //TIRABA ERROR
             'user' => [
                 'id' => auth()->user()->id,
                 'firstname' => auth()->user()->firstname,

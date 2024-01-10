@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Models\Role;
+use App\Models\UserRole;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
@@ -12,23 +14,37 @@ class AuthTest extends TestCase
 {
     use RefreshDatabase, TestAuthorization;
 
-    const AUTH_URL = 'api/auth';
+    const AUTH_URL = 'auth';
 
     public function test_login_valid()
     {
         $user = User::factory()->create();
 
+       $role = $this->UserRoleFunction($user);
+
         $response = $this->post(self::AUTH_URL.'/login', [
-            'username' => $user->username,
+            'email' => $user->email,
             'password' => 'password',
-        ])->assertStatus(Response::HTTP_OK)
-        ->assertJsonStructure(['access_token', 'token_type', 'expires_in', 'user']);
+        ])
+
+         ->assertStatus(Response::HTTP_OK)
+         ->assertJsonStructure(['access_token', 'token_type', 'expires_in', 'user']);
 
         $this->assertEquals($response['user'], [
+            'id' => $user->id,
             'firstname' => $user->firstname,
             'lastname' => $user->lastname,
-            'username' => $user->username,
-        ]);
+            'email' => $user->email,
+            'birth_date' => $user->birth_date,
+            'phone' => $user->phone,
+            'address' => $user->address,
+             'role' => [
+                'id' => $role->id,
+                'name' => $role->name,
+                'description' => $role->description
+                ]
+            ]);
+
     }
 
     public function test_login_invalid()
@@ -40,18 +56,20 @@ class AuthTest extends TestCase
 
         $this->post(self::AUTH_URL.'/login', $data)
             ->assertStatus(Response::HTTP_UNAUTHORIZED)
-            ->assertJsonFragment(['error' => 'Error username or password.']);
+            ->assertJsonFragment(['error' => 'Error email or password.']);
     }
 
     public function test_logout()
     {
         $user = User::factory()->create();
-        $data = [
-            'username' => $user->username,
-            'password' => 'password',
-        ];
 
-        $response = $this->post(self::AUTH_URL.'/login', $data);
+        $role = $this->UserRoleFunction($user);
+
+        $response = $this->post(self::AUTH_URL.'/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
         $this->withHeader('Authorization', 'Bearer '. $response['access_token'])
             ->post(self::AUTH_URL.'/logout')
             ->assertStatus(Response::HTTP_OK)
@@ -73,4 +91,18 @@ class AuthTest extends TestCase
             ->assertStatus(Response::HTTP_OK)
             ->assertJsonStructure(['access_token', 'token_type', 'expires_in', 'user']);
     }
+
+    private function UserRoleFunction($user){
+        $role = Role::create([
+            'name' => 'rol',
+            'description' => 'descripcion'
+        ]);
+
+        $userRol = UserRole::create([
+            'user_id' => $user->id,
+            'role_id' => $role->id
+        ]);
+        return $role;
+    }
+
 }

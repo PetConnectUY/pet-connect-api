@@ -13,4 +13,12 @@ trait UUID
         }
         return $uuid;
     }
+
+    public function generateToken($model, $column) {
+        $token = random_int(100000, 999999);
+        while(!is_null($model::where($column, '=', $token)->first())) {
+            $token = random_int(100000, 999999);
+        }
+        return $token;
+    }
 }
