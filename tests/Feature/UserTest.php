@@ -43,66 +43,75 @@ class UserTest extends TestCase
     //         ]);
     // }
 
-//    public function test_update_user()
-//    {
-//         $user = User::factory()->create();
+   public function test_update_user()
+   {
+        $user = User::factory()->create();
 
-//         $data = [
-//             'username' => $user->username,
-//             'password' => 'password',
-//         ];
+        $role = $this->UserRoleFunction($user);
 
-//         $response = $this->post(self::AUTH_URL.'/login', $data)
-//             ->assertStatus(Response::HTTP_OK);
+        $response = $this->post(self::AUTH_URL.'/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ])
+            ->assertStatus(Response::HTTP_OK);
         
-//         $updateData = [
-//             'firstname' => 'updateTest',
-//             'lastname' => 'updateTest',
-//             'birth_date' => '2000-02-20',
-//             'phone' => '096390295',
-//             'address' => 'updateTest'
-//         ];
+        $updateData = [
+            'firstname' => 'updateTest',
+            'lastname' => 'updateTest',
+            'birth_date' => '2000-02-20',
+            'phone' => '096390295',
+            'address' => 'updateTest'
+        ];
         
-//         $this->withHeader('Authorization', 'Bearer '. $response['access_token'])
-//             ->post(self::USER_URL.'/'.$user->id, $updateData)
-//             ->assertStatus(Response::HTTP_OK)
-//             ->assertExactJson([
-//                 'id' => $user->id,
-//                 'firstname' => $updateData['firstname'],
-//                 'lastname' => $updateData['lastname'],
-//                 'username' => $user->username,
-//                 'email' => $user->email,
-//                 'birth_date' => $updateData['birth_date'],
-//                 'phone' => $updateData['phone'],
-//                 'address' => $updateData['address']
-//             ]);
-//    }
+        $this->withHeader('Authorization', 'Bearer '. $response['access_token'])
+            ->post(self::USER_URL.'/'.$user->id, $updateData)
+            ->assertStatus(Response::HTTP_OK)
+            ->assertExactJson([
+                'id' => $user->id,
+                'firstname' => $updateData['firstname'],
+                'lastname' => $updateData['lastname'],
+                'email' => $user->email,
+                'birth_date' => $updateData['birth_date'],
+                'phone' => $updateData['phone'],
+                'address' => $updateData['address'],
+                'role' => [
+                    'id' => $role->id,
+                    'name' => $role->name,
+                    'description' => $role->description
+                    ]
+            ]);
+   }
 
-//    public function test_destroy_user()
-//    {
-//         $user = User::factory()->create();
+   public function test_destroy_user()
+   {
+    $user = User::factory()->create();
 
-//         $data = [
-//             'username' => $user->username,
-//             'password' => 'password',
-//         ];
+    $role = $this->UserRoleFunction($user);
 
-//         $response = $this->post(self::AUTH_URL.'/login', $data)
-//             ->assertStatus(Response::HTTP_OK);
+    $response = $this->post(self::AUTH_URL.'/login', [
+        'email' => $user->email,
+        'password' => 'password',
+    ])
+        ->assertStatus(Response::HTTP_OK);
 
-//         $this->withHeader('Authorization', 'Bearer '. $response['access_token'])
-//             ->delete(self::USER_URL.'/'.$user->id)
-//             ->assertStatus(Response::HTTP_OK)
-//             ->assertExactJson([
-//                 'id' => $user->id,
-//                 'firstname' => $user->firstname,
-//                 'lastname' => $user->lastname,
-//                 'username' => $user->username,
-//                 'email' => $user->email,
-//                 'birth_date' => $user->birth_date,
-//                 'phone' => $user->phone,
-//                 'address' => $user->address,
-//             ]);
+        $this->withHeader('Authorization', 'Bearer '. $response['access_token'])
+            ->delete(self::USER_URL.'/'.$user->id)
+            ->assertStatus(Response::HTTP_OK)
+            ->assertExactJson([
+                'id' => $user->id,
+                'firstname' => $user->firstname,
+                'lastname' => $user->lastname,
+                'email' => $user->email,
+                'birth_date' => $user->birth_date,
+                'phone' => $user->phone,
+                'address' => $user->address,
+                'role' => [
+                    'id' => $role->id,
+                    'name' => $role->name,
+                    'description' => $role->description
+                    ]
+            ]);
 
-//    }
+   }
+
 }

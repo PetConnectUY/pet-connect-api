@@ -18,3 +18,4 @@ yarn-error.log
 /.vscode
 
 /docker/mysql/data
+storage/logs/laravel.log
