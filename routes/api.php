@@ -19,6 +19,7 @@ use App\Http\Controllers\Dashboard\PetController as DashboardPetController;
 use App\Http\Controllers\Dashboard\UserController as DashboardUserController;
 use App\Http\Controllers\Dashboard\QrCodeController as DashboardQrCodesController;
 use App\Http\Controllers\PetRaceController;
+use App\Http\Controllers\ContactController;
 use App\Models\User;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -148,3 +149,9 @@ Route::prefix('clients')->group(function() {
         Route::delete('{clientId}/branchs/{id}', [ClientBranchController::class, 'destroy']);
     });
 });
+
+Route::prefix('clients')->group(function() {
+    Route::post('/contact', [ContactController::class, 'store']);
+});
+
+
