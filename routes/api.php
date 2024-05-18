@@ -20,6 +20,7 @@ use App\Http\Controllers\Dashboard\UserController as DashboardUserController;
 use App\Http\Controllers\Dashboard\QrCodeController as DashboardQrCodesController;
 use App\Http\Controllers\PetRaceController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\SubscriptionController;
 use App\Models\User;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -154,4 +155,6 @@ Route::prefix('clients')->group(function() {
     Route::post('/contact', [ContactController::class, 'store']);
 });
 
-
+Route::prefix('subscribe')->group(function() {
+    Route::post('', [SubscriptionController::class, 'subscribe'])->middleware('throttle:1,5');
+});
