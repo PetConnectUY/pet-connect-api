@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\QrCodeActivationController;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StatisticController;
 use App\Http\Controllers\UserController;
@@ -157,4 +158,8 @@ Route::prefix('clients')->group(function() {
 
 Route::prefix('subscribe')->group(function() {
     Route::post('', [SubscriptionController::class, 'subscribe'])->middleware('throttle:1,5');
+});
+
+Route::prefix('community')->middleware('jwt.auth')->group(function() {
+    Route::get('pets', [CommunityController::class, 'index']);
 });

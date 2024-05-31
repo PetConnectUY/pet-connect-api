@@ -70,4 +70,14 @@ class Pet extends Model
             ]
         ];
     }
+
+    public function toFeedArray()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'images' => $this->images,
+            'created_at' => $this->created_at,
+        ];
+    }
 }
